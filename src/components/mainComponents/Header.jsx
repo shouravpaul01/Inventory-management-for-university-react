@@ -62,7 +62,7 @@ const Header = () => {
     const navLink = user ? afterSignInNavLink : beforeSignInNavLink;
     return (
         <>
-            <header className="my-container ">
+            <header className="md:my-container ">
                 <div className="md:flex flex-col gap-3 hidden  mb-3">
                     <div className="bg-slate-200 flex justify-end gap-4 w-full">
                         <p className="flex items-center gap-1"><AiOutlinePhone /> 02224491045-51</p>
@@ -89,8 +89,8 @@ const Header = () => {
                     <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                     <div className="drawer-content flex flex-col">
                         {/* Navbar */}
-                        <div className="w-full navbar min-h-[40px] bg-blue-600 py-0 px-0  border-b border-indigo-200">
-                            <div className="flex-none pe-5 lg:hidden">
+                        <div className="w-full navbar min-h-[40px] md:bg-violet-700 pt-2 md:py-0  px-0 border-b border-violet-800  ">
+                            <div className="flex-none ps-2 pe-6 lg:hidden">
                                 <label htmlFor="my-drawer-3" aria-label="open sidebar" >
                                     <FaBars className="text-xl" />
                                 </label>
