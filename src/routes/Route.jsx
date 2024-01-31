@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import HomePage from "../pages/mainPages/Home/HomePage";
 import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
+import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
         {
           path:'/',
           element:<HomePage/>
+        },
+        {
+          path:'/accessories',
+          element:<AccessoriesPage/>
         },
       ],
     },
