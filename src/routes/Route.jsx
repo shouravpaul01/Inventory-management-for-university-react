@@ -4,6 +4,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import HomePage from "../pages/mainPages/Home/HomePage";
 import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
 import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
+import CategoryPage from "../pages/adminpages/Category/CategoryPage";
 
 
 const router = createBrowserRouter([
@@ -26,12 +27,12 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: <AdminLayout/>,
         errorElement:<ErrorPage/>,
-        // children:[
-        //   {
-        //     path:'/',
-        //     element:,
-        //   }
-        // ]
+        children:[
+          {
+            path:'/dashboard/category',
+            element:<CategoryPage/>,
+          }
+        ]
     },
   ]);
 
