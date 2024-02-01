@@ -102,7 +102,7 @@ const AdminLayout = () => {
                             <li><NavLink to={"/dashboard"} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Dashboard</NavLink></li>
                             <li><NavLink to={'/dashboard/all-user'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Users</NavLink></li>
                             <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Category</NavLink></li>
-                            <li><NavLink to={'/dashboard/shows'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Movie Shows</NavLink></li>
+                            <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Sub Category</NavLink></li>
                             <li><NavLink to={'/dashboard/all-booking'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Booking</NavLink></li>
 
 

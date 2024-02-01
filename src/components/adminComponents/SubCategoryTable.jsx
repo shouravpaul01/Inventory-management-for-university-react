@@ -1,16 +1,16 @@
-import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 
-const CategoryTable = () => {
+const SubCategoryTable = () => {
     return (
-
         <div className="overflow-x-auto bg-white my-3">
             <table className="table">
                 {/* head */}
                 <thead className='bg-green-200 text-sm'>
                     <tr>
                         <th></th>
-                        <th>Name</th>
-                        <th>Status</th>
+                        <th>Category </th>
+                        <th>Sub Category </th>
+                        <th>Status </th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -19,20 +19,19 @@ const CategoryTable = () => {
                     <tr>
                         <th>1</th>
                         <td>Cy Ganderton</td>
+                        <td>Quality Control Specialist</td>
                         <td>
                             <button className='btn btn-xs btn-primary'>Status</button>
                         </td>
                         <td className="space-x-2">
-                            <button className="btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
-                            <button className="btn btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
+                            <button className="btn btn-xs btn-circle btn-primary"><FaPenToSquare /></button>
+                            <button className="btn btn-xs btn-circle btn-error"><FaRegTrashCan /></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
-
     );
 };
 
-export default CategoryTable;
+export default SubCategoryTable;

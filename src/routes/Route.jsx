@@ -5,6 +5,7 @@ import HomePage from "../pages/mainPages/Home/HomePage";
 import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
 import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 import CategoryPage from "../pages/adminpages/Category/CategoryPage";
+import SubCategoryPage from "../pages/adminpages/SubCategory/SubCategoryPage";
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
           {
             path:'/dashboard/category',
             element:<CategoryPage/>,
+          },
+          {
+            path:'/dashboard/sub-category',
+            element:<SubCategoryPage/>,
           }
         ]
     },
