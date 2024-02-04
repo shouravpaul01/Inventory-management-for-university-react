@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .my-container{
-    @apply px-2 md:max-w-screen-md md:px-5 lg:max-w-screen-lg  mx-auto
+    @apply px-2 md:px-0 md:max-w-screen-md lg:max-w-screen-lg  mx-auto
 }
 /* input{
   @apply 

@@ -62,7 +62,7 @@ const Header = () => {
     const navLink = user ? afterSignInNavLink : beforeSignInNavLink;
     return (
         <>
-            <header className="md:my-container ">
+            <header className=" my-container ">
                 <div className="md:flex flex-col gap-3 hidden  mb-3">
                     <div className="bg-slate-200 flex justify-end gap-4 w-full">
                         <p className="flex items-center gap-1"><AiOutlinePhone /> 02224491045-51</p>

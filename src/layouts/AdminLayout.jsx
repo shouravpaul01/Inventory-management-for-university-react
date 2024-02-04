@@ -1,7 +1,8 @@
 import { FaArrowRightFromBracket, FaBars } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+
 import julogo from '../assets/Images/ju-logo.png'
+import { ToastContainer } from "react-toastify";
 
 const AdminLayout = () => {
     const handleLogout = () => {
@@ -22,19 +23,19 @@ const AdminLayout = () => {
 
                     {/* This Content hidden when screen size is 480px */}
                     <div className="flex-none">
-                    <div className="flex gap-2 md:hidden">
-                        <div className='relative '>
-                            <div className='w-20 h-20 md:w-24 md:h-24 border-2 border-dotted border-violet-800 rounded-full animate-spin p-4'>
+                        <div className="flex gap-2 md:hidden">
+                            <div className='relative '>
+                                <div className='w-20 h-20 md:w-24 md:h-24 border-2 border-dotted border-violet-800 rounded-full animate-spin p-4'>
+                                </div>
+                                <img src={julogo} className='w-14 md:w-16 absolute top-2 left-3 md:left-4 opacity-85' alt="ju-logo" />
                             </div>
-                            <img src={julogo} className='w-14 md:w-16 absolute top-2 left-3 md:left-4 opacity-85' alt="ju-logo" />
-                        </div>
-                        <div className="flex items-end ">
-                            <div className="pb-3 font-bold ">
-                                <p className="text-xl md:text-2xl text-violet-800">Jahangirnagar University</p>
-                                <p className="">Inventory Management</p>
+                            <div className="flex items-end ">
+                                <div className="pb-3 font-bold ">
+                                    <p className="text-xl md:text-2xl text-violet-800">Jahangirnagar University</p>
+                                    <p className="">Inventory Management</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                     <div className="flex-none">
                         <div className="md:flex justify-end hidden">
@@ -62,11 +63,11 @@ const AdminLayout = () => {
                 </div>
                 <div className="mx-0 md:mx-10 my-12">
                     {/* Page content here */}
-                    
+
                     <Outlet />
                     <ToastContainer
                         position="top-right"
-                        autoClose={3000}
+                        autoClose={5000}
                         hideProgressBar={false}
                         newestOnTop={false}
                         closeOnClick
@@ -74,8 +75,7 @@ const AdminLayout = () => {
                         pauseOnFocusLoss
                         draggable
                         pauseOnHover
-                        theme="light"
-                    />
+                        theme="light"/>
 
                 </div>
             </div>
