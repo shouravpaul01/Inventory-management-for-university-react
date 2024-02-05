@@ -6,24 +6,24 @@ import Pagination from "../../../components/sharedComponents/Pagination";
 import { useState } from "react";
 import SubCategoryTable from "../../../components/adminComponents/SubCategoryTable";
 import SelectInputField from "../../../components/sharedComponents/SelectInputField";
+import useCategories from "../../../hooks/useCategories";
+import SubCategoryForm from "../../../components/adminComponents/SubCategoryForm";
+import useSWR from "swr";
+import axiosInstance from "../../../../axios.config";
 
-
+const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const SubCategoryPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
 
+  
+    const { data: subCategories = [], mutate:subCategoryMutate, isLoading } = useSWR(`/sub-cat?page=${currentPage}&search=${searchValue}`, fetcher)
+console.log(subCategories);
     return (
         <section >
             <div className="bg-gray-100 ">
                 <p className="bg-violet-700 font-bold text-white py-2 px-4">Add Sub Category</p>
-                <form className="p-5">
-                    <div className="w-full flex gap-2">
-                        <SelectInputField placeholder={'Category'} name={'category'} />
-                        <InputField placeholder={"Sub Category"} name={'name'} />
-                        <button type="submit" className="btn h-10 min-h-10  btn-primary"><FaCirclePlus /> Add</button>
-                    </div>
-
-                </form>
+               <SubCategoryForm  subCategoryMutate={subCategoryMutate} />
             </div>
             <div className="bg-gray-100 mt-4">
                 <p className="bg-violet-700 font-bold text-white py-2 px-4">All Sub Categories</p>
@@ -33,8 +33,8 @@ const SubCategoryPage = () => {
                     </div>
 
 
-                    <SubCategoryTable />
-                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    <SubCategoryTable subCategories={subCategories?.data} subCategoryMutate={subCategoryMutate}/>
+                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={subCategories?.totalPages}/>
                 </div>
             </div>
         </section>

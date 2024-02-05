@@ -10,15 +10,14 @@ import { toast } from "react-toastify";
 import useSWR from "swr";
 import Loading from "../../../components/sharedComponents/Loading";
 import CategoryForm from "../../../components/adminComponents/CategoryForm";
+import useCategories from "../../../hooks/useCategories";
 
 
 const CategoryPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
-
     
-    const fetcher = url => axiosInstance.get(url).then(res => res.data)
-    const { data: categories = [], mutate, isLoading } = useSWR(`/category?page=${currentPage}`, fetcher)
+    const {categories,mutate,isLoading}=useCategories(currentPage,searchValue)
     
 
     return (
