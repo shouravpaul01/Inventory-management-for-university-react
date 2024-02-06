@@ -16,9 +16,8 @@ const SubCategoryPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
 
-  
     const { data: subCategories = [], mutate:subCategoryMutate, isLoading } = useSWR(`/sub-cat?page=${currentPage}&search=${searchValue}`, fetcher)
-console.log(subCategories);
+
     return (
         <section >
             <div className="bg-gray-100 ">

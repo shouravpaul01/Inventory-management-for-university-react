@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import useCategories from '../../hooks/useCategories';
 
 const SubCategoryForm = ({ editData,subCategoryMutate }) => {
-    const { categories,mutate } = useCategories()
+    const { categories } = useCategories()
     const { register, handleSubmit, reset, setValue, setError, formState: { errors }, } = useForm();
     useEffect(() => {
         if (editData) {
@@ -15,7 +15,7 @@ const SubCategoryForm = ({ editData,subCategoryMutate }) => {
             setValue('name',editData?.name)
         }
     }, [editData])
-console.log(editData?.category?.name);
+
     const showValidationError=(validationErrors)=>{
         validationErrors?.map(validationError => setError(validationError.field, {
             type: 'manual',
@@ -36,13 +36,12 @@ console.log(editData?.category?.name);
         })
     }
     const handleUpdate = (data) => {
-        console.log(data);
         axiosInstance.patch('/sub-cat', data).then(res => {
             if (res.data.code == 200) {
                 document.getElementById(`${data._id}`).close()
                 subCategoryMutate()
                 reset()
-                toast.success(res?.data?.message)
+                toast.error(res?.data?.message)
             } else if (res?.data?.code == 204) {
                 showValidationError(res?.data?.validationErrors)
             }

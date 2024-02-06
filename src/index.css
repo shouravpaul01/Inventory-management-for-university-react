@@ -44,6 +44,7 @@
   .mobile-menu-active-link{
     @apply bg-indigo-500 text-white 
   }
+ 
 /* Dashboard */
 .menu-item{
   @apply p-4  text-base-content space-y-1

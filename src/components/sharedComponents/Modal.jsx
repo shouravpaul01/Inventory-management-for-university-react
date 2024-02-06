@@ -6,7 +6,7 @@ const Modal = ({ width,modalId, children }) => {
         <dialog id={modalId} className="modal">
             <div className={`modal-box ${width}`} >
                 <div className="border-b border-violet-700">
-                    <p className="pb-3">Edit</p>
+                    <p className="pb-3 ps-2 text-xl font-bold">Edit</p>
                 </div>
                 <form method="dialog" >
                     {/* if there is a button in form, it will close the modal */}

@@ -6,6 +6,7 @@ import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
 import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 import CategoryPage from "../pages/adminpages/Category/CategoryPage";
 import SubCategoryPage from "../pages/adminpages/SubCategory/SubCategoryPage";
+import ProductPage from "../pages/adminpages/Product/ProductPage";
 
 
 const router = createBrowserRouter([
@@ -36,7 +37,11 @@ const router = createBrowserRouter([
           {
             path:'/dashboard/sub-category',
             element:<SubCategoryPage/>,
-          }
+          },
+          {
+            path:'/dashboard/product',
+            element:<ProductPage/>,
+          },
         ]
     },
   ]);
