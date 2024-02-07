@@ -69,7 +69,7 @@ const ProductTable = ({products,productMutate}) => {
             </table>
         </div>
         <Modal width={'max-w-3xl'} modalId={modalId} >
-            <ProductForm editData={editData} />
+            <ProductForm editData={editData} productMutate={productMutate}/>
         </Modal>
     </>
     );
