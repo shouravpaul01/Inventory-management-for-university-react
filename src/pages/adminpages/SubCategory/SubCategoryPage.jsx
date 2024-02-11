@@ -28,7 +28,7 @@ const SubCategoryPage = () => {
                 <p className="bg-violet-700 font-bold text-white py-2 px-4">All Sub Categories</p>
                 <div className="px-4 py-5">
                     <div className="w-full md:w-80">
-                        <InputSearch setSearchValue={setSearchValue} />
+                        <InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'}/>
                     </div>
 
 

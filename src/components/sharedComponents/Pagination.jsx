@@ -4,18 +4,25 @@ import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-ico
 
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
     
+    const totalPageArray = generateTotalPaginatePages(totalPages)
+    console.log(totalPageArray);
     return (
-        <div className="flex  gap-3 p-2">
+        <>
+        {
+            totalPageArray.length>1 && <div className="flex  gap-3 p-2">
             <button onClick={() => setCurrentPage(currentPage - 1)} className="btn btn-sm btn-circle btn-primary" disabled={currentPage === 1}><MdKeyboardDoubleArrowLeft /></button>
             <ul className="flex flex-wrap gap-2">
                 {
 
-                    generateTotalPaginatePages(totalPages)?.map((pageNo, index) => <li key={index + 1} className={`btn btn-sm btn-circle ${currentPage==pageNo?"btn-primary":"btn-outline btn-primary"} `} onClick={()=>{setCurrentPage(pageNo)}} >{pageNo}</li>)
+                    totalPageArray?.map((pageNo, index) => <li key={index + 1} className={`btn btn-sm btn-circle ${currentPage == pageNo ? "btn-primary" : "btn-outline btn-primary"} `} onClick={() => { setCurrentPage(pageNo) }} >{pageNo}</li>)
                 }
 
             </ul>
             <button onClick={() => setCurrentPage(currentPage + 1)} className="btn btn-sm btn-circle btn-primary" disabled={currentPage === totalPages}><MdKeyboardDoubleArrowRight /></button>
         </div>
+        }
+        </>
+        
     );
 };
 

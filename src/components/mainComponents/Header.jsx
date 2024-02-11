@@ -1,14 +1,30 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LiaFaxSolid } from "react-icons/lia";
 import { FiMail } from "react-icons/fi";
 import { AiOutlinePhone } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaHouse, FaPhone, FaUserShield } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
+import InputSearch from "../sharedComponents/InputSearch";
 
 
 const Header = () => {
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
+    const navigate=useNavigate()
+
+   
+    useEffect(()=>{
+        // Navigate accessories page when product is search  
+        if (searchValue) {
+            console.log('ddd');
+          navigate(`/accessories?search=${searchValue}`)
+        }
+       if (!searchValue) {
+        navigate(`/accessories`)
+       }
+    },[searchValue])
+   console.log(searchValue,'www');
     // const { user, logout, loading } = useAuth()
     // const { candidateUser } = useCandidateUser()
     const user = null
@@ -28,16 +44,19 @@ const Header = () => {
         //     .catch((error) => console.log(error))
     };
 
-    const commonNavLink = <>
+    const commonNavLink = <div className="flex-none"><ul className="flex items-center justify-center ">
         <li className="nav"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '} onClick={() => handleSidebarClose()}>Home</NavLink></li>
         <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '}>Contact</Link></li>
-    </>
-    const beforeSignInNavLink = <>
-        <li><NavLink to={'/signin'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
-    </>
+    </ul></div>
+    const beforeSignInNavLink = <div className="flex-none ">
+        <ul className="flex items-center gap-4">
+            <li><InputSearch  setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
+            <li><NavLink to={'/signin'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
+        </ul>
+    </div>
     const afterSignInNavLink = <>
         <li>
-            <div className="dropdown dropdown-bottom dropdown-end">
+            <div className="dropdown dropdown-bottom dropdown-end ">
                 <label tabIndex={0} onClick={() => setIsOpenDropdown(!isOpenDropdown)} className={`flex items-center  justify-center gap-8 border border-indigo-700 rounded-full p-[3px] ${isOpenDropdown ? 'bg-primary text-white' : ''}`}>
                     <div className="avatar">
                         <div className="w-7 rounded-full">
@@ -60,6 +79,7 @@ const Header = () => {
 
 
     const navLink = user ? afterSignInNavLink : beforeSignInNavLink;
+
     return (
         <>
             <header className=" my-container ">
@@ -87,16 +107,16 @@ const Header = () => {
                 </div>
                 <div className="drawer">
                     <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-                    <div className="drawer-content flex flex-col">
+                    <div className="drawer-content ">
                         {/* Navbar */}
-                        <div className="w-full navbar min-h-[40px] md:bg-violet-700 pt-2 md:py-0  px-0 border-b border-violet-800  ">
-                            <div className="flex-none ps-2 pe-6 lg:hidden">
+                        <div className=" navbar justify-normal min-h-[40px] md:bg-violet-700 pt-2 md:py-0  px-0 border-b border-violet-800  ">
+                            {/* <div className="flex-none ps-2 pe-6 lg:hidden">
                                 <label htmlFor="my-drawer-3" aria-label="open sidebar" >
                                     <FaBars className="text-xl" />
                                 </label>
-                            </div>
-                            <div className="md:flex-1">
-                                <div className="flex gap-2 md:gap-4 md:hidden">
+                            </div> */}
+
+                            {/* <div className="flex gap-2 md:gap-4 md:hidden">
                                     <div className='relative '>
                                         <div className='w-20 h-20 md:w-24 md:h-24 border-2 border-dotted border-violet-800 rounded-full animate-spin p-4'>
                                         </div>
@@ -108,15 +128,15 @@ const Header = () => {
                                             <p className="">Inventory Management</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div> */}
 
-                            <div className="flex-none hidden lg:block">
-                                <ul className="md:flex hidden items-center justify-center gap-7">
-                                    {/* Navbar menu content here */}
-                                    {commonNavLink}
-                                    {navLink}
-                                </ul>
+
+                            <div className="md:flex justify-between  hidden w-full px-3 ">
+
+                                {/* Navbar menu content here */}
+                                {commonNavLink}
+                                {navLink}
+
                             </div>
                         </div>
 

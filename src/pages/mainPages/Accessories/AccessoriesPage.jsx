@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
-import { FaArrowRight, FaMinus, FaPlus } from "react-icons/fa6";
+import { FaArrowRight, FaCircleInfo, FaMinus, FaPlus } from "react-icons/fa6";
 import useCategories from "../../../hooks/useCategories";
 import useSubCatByCategory from "../../../hooks/useSubCatByCategory";
 import useSWR from "swr";
 import axiosInstance from "../../../../axios.config";
 import { set } from "react-hook-form";
-import CardAccessories from "../../../components/sharedComponents/CardAccessories";
+import CardAccessories from "../../../components/mainComponents/CardAccessories";
 import useProducts from "../../../hooks/useProducts";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import Pagination from "../../../components/sharedComponents/Pagination";
+import Loading from "../../../components/sharedComponents/Loading";
 
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const AccessoriesPage = () => {
-    const [isDropdown, setIsDropDown] = useState('')
     const { categories } = useCategories()
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
-    //     const catArray =  selectedCategories.map((value) => `${value}`).join(',');
-    //    const subCatArray=selectedSubCategories.map((value) => `${value}`).join(',');
-    const { data: products = [] } = useSWR(`/product/all-active-product?categories=${selectedCategories}&subCategories=${selectedSubCategories}`, fetcher)
+    const [resturnStatus, setReturnStatus] = useState('');
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(4)
 
+    const [searchParams] = useSearchParams();
+    const searchValue = searchParams.get('search') || '';
+
+
+
+    const { data: products = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&returnStatus=${resturnStatus}`, fetcher)
+    console.log(products?.data?.length);
     const handleSelectedCategory = (_id) => {
         const contentId = document.getElementById(`${_id}`)
         const filterCategory = selectedCategories.filter(category => category !== _id)
@@ -28,8 +36,6 @@ const AccessoriesPage = () => {
             }
             setSelectedCategories(filterCategory)
         } else {
-            console.log(_id);
-            
             if (contentId) {
                 contentId.classList.remove('hidden')
             }
@@ -61,7 +67,7 @@ const AccessoriesPage = () => {
                                 </label>
                                 <div id={`${category._id}`} className="hidden">
                                     {
-                                        category?.subcategories?.map((subCategory, index) => <div key={index}  className=" ps-5 border-b">
+                                        category?.subcategories?.map((subCategory, index) => <div key={index} className=" ps-5 border-b">
                                             <label className="label justify-normal cursor-pointer">
                                                 <input type="checkbox" onClick={() => handleSelectedSubCategory(subCategory._id)} className="checkbox  checkbox-primary" />
                                                 <span className="ps-4">{subCategory?.name}</span>
@@ -74,12 +80,35 @@ const AccessoriesPage = () => {
                     </div>
                 </div>
                 <div className="basis-9/12">
-                    <p className="bg-violet-700 font-bold text-xl text-white rounded-sm py-2 px-5">Select Accessories</p>
-                    <div className="py-7 grid grid-cols-4 gap-6">
-                        {
-                            products.data?.map((product, index) => <CardAccessories product={product} key={index} />)
-                        }
+                    {/* <p className="bg-violet-700 font-bold text-xl text-white rounded-sm py-2 px-5">Select Accessories</p> */}
+                    <div className="border-b pb-2  text-end">
+                        <div className="">
+                            <label >Filter By: </label>
+                            <select onChange={(e) => setReturnStatus(e.target.value)} className="select select-bordered focus:outline-none min-h-8 h-8 w-full max-w-36">
+                                <option disabled selected>--Select--</option>
+                                <option value='Yes'>Yes</option>
+                                <option value='No'>No</option>
+                            </select>
+                        </div>
                     </div>
+                    {
+                        isLoading ? <><Loading /></> : <>{
+
+                            products?.data?.length > 0 ? <div className="pt-4 grid grid-cols-4 gap-6">
+                                {
+                                    products.data?.map((product, index) => <CardAccessories product={product} key={index} />)
+                                }
+                            </div> : <div role="alert" className="pt-4 flex items-center justify-center gap-5 text-lg">
+                                <FaCircleInfo />
+                                <span>Data not found.</span>
+
+                            </div>
+                        }
+                            <div className="pt-4">
+                                <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={products?.totalPages} />
+                            </div>
+                        </>
+                    }
                 </div>
             </div>
 
