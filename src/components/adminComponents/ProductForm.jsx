@@ -61,6 +61,7 @@ const ProductForm = ({ productMutate, editData }) => {
         axiosInstance.post('/product', formData).then(res => {
             if (res.data.code == 200) {
                 productMutate()
+                setImageUrl('')
                 reset()
                 toast.success(res?.data?.message)
             } else if (res?.data?.code == 204) {
