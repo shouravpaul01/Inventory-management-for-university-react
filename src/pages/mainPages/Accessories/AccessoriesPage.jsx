@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
-import { FaArrowRight, FaCircleInfo, FaMinus, FaPlus } from "react-icons/fa6";
+import { useState } from "react";
+import { FaCircleInfo, } from "react-icons/fa6";
 import useCategories from "../../../hooks/useCategories";
-import useSubCatByCategory from "../../../hooks/useSubCatByCategory";
 import useSWR from "swr";
 import axiosInstance from "../../../../axios.config";
-import { set } from "react-hook-form";
 import CardAccessories from "../../../components/mainComponents/CardAccessories";
-import useProducts from "../../../hooks/useProducts";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Pagination from "../../../components/sharedComponents/Pagination";
 import Loading from "../../../components/sharedComponents/Loading";
 
@@ -19,12 +16,14 @@ const AccessoriesPage = () => {
     const [resturnStatus, setReturnStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(4)
+    const [selectedTotalAccessories, setSelectedTotalAccessories] = useState([])
 
     const [searchParams] = useSearchParams();
     const searchValue = searchParams.get('search') || '';
-
-
-
+    const resturnStatusOptions = [
+        { value: 'Yes' },
+        { value: 'No' }
+    ]
     const { data: products = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&returnStatus=${resturnStatus}`, fetcher)
     console.log(products?.data?.length);
     const handleSelectedCategory = (_id) => {
@@ -55,7 +54,7 @@ const AccessoriesPage = () => {
     // console.log(categories);
     return (
         <section className="my-container py-12">
-            <div className="flex gap-5">
+            <div className="flex flex-col md:flex-row gap-5">
                 <div className="basis-3/12 ">
                     <p className="bg-violet-700 font-bold text-xl text-white rounded-sm py-2 px-5 mb-3">Select Types</p>
                     <div>
@@ -84,19 +83,20 @@ const AccessoriesPage = () => {
                     <div className="border-b pb-2  text-end">
                         <div className="">
                             <label >Filter By: </label>
-                            <select onChange={(e) => setReturnStatus(e.target.value)} className="select select-bordered focus:outline-none min-h-8 h-8 w-full max-w-36">
-                                <option disabled selected>--Select--</option>
-                                <option value='Yes'>Yes</option>
-                                <option value='No'>No</option>
+                            <select value={resturnStatus} onChange={(e) => setReturnStatus(e.target.value)} className="select select-bordered focus:outline-none min-h-8 h-8 w-full max-w-36">
+                                <option disabled  value='' >--Select Return Status--</option>
+                                {
+                                    resturnStatusOptions?.map((returnStatus, index) => <option key={index} value={returnStatus.value}>{returnStatus.value}</option>)
+                                }
                             </select>
                         </div>
                     </div>
                     {
                         isLoading ? <><Loading /></> : <>{
 
-                            products?.data?.length > 0 ? <div className="pt-4 grid grid-cols-4 gap-6">
+                            products?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
                                 {
-                                    products.data?.map((product, index) => <CardAccessories product={product} key={index} />)
+                                    products.data?.map((product, index) => <CardAccessories key={index} product={product} selectedTotalAccessories={selectedTotalAccessories}  setSelectedTotalAccessories={setSelectedTotalAccessories} />)
                                 }
                             </div> : <div role="alert" className="pt-4 flex items-center justify-center gap-5 text-lg">
                                 <FaCircleInfo />

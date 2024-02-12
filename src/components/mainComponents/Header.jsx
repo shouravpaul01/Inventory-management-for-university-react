@@ -2,33 +2,35 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LiaFaxSolid } from "react-icons/lia";
 import { FiMail } from "react-icons/fi";
 import { AiOutlinePhone } from "react-icons/ai";
-import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaHouse, FaPhone, FaUserShield } from "react-icons/fa6";
+import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaCartFlatbedSuitcase, FaHouse, FaPhone, FaUserShield } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
 import InputSearch from "../sharedComponents/InputSearch";
 
 
 const Header = () => {
+    const user = null
+    const candidateUser = null
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
     const [searchValue, setSearchValue] = useState('')
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-   
-    useEffect(()=>{
+
+    useEffect(() => {
         // Navigate accessories page when product is search  
         if (searchValue) {
             console.log('ddd');
-          navigate(`/accessories?search=${searchValue}`)
+            navigate(`/accessories?search=${searchValue}`)
         }
-       if (!searchValue) {
-        navigate(`/accessories`)
-       }
-    },[searchValue])
-   console.log(searchValue,'www');
+        if (!searchValue) {
+            navigate(`/accessories`)
+        }
+        console.log('header');
+    }, [searchValue])
+    console.log(searchValue, 'www');
     // const { user, logout, loading } = useAuth()
     // const { candidateUser } = useCandidateUser()
-    const user = null
-    const candidateUser = null
+
 
     // Sidebar hide when  Mobile menu item click
     const handleSidebarClose = () => {
@@ -44,16 +46,10 @@ const Header = () => {
         //     .catch((error) => console.log(error))
     };
 
-    const commonNavLink = <div className="flex-none"><ul className="flex items-center justify-center ">
-        <li className="nav"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '} onClick={() => handleSidebarClose()}>Home</NavLink></li>
-        <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '}>Contact</Link></li>
-    </ul></div>
-    const beforeSignInNavLink = <div className="flex-none ">
-        <ul className="flex items-center gap-4">
-            <li><InputSearch  setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
-            <li><NavLink to={'/signin'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
-        </ul>
-    </div>
+    const beforeSignInNavLink = <>
+        <li><NavLink to={'/signin'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
+    </>
+
     const afterSignInNavLink = <>
         <li>
             <div className="dropdown dropdown-bottom dropdown-end ">
@@ -77,8 +73,27 @@ const Header = () => {
         </li>
     </>
 
+    const authNav = user ? afterSignInNavLink : beforeSignInNavLink;
 
-    const navLink = user ? afterSignInNavLink : beforeSignInNavLink;
+
+    const leftSideNav = <div className="flex-none "><ul className="flex items-center justify-center ">
+        <li className="nav"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '} onClick={() => handleSidebarClose()}>Home</NavLink></li>
+        <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '}>Contact</Link></li>
+    </ul></div>
+    const rightSideNav = <div className="flex-none ">
+        <ul className="flex items-center  gap-4">
+            <li><InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
+            {
+                authNav
+            }
+            <li className="flex items-center justify-center"><NavLink to={'/'} className="indicator" >
+
+                <span className="indicator-item text-red-400">5</span>
+                <div className="text-lg text-white"><FaCartFlatbedSuitcase /></div>
+            </NavLink></li>
+        </ul>
+    </div>
+
 
     return (
         <>
@@ -134,8 +149,8 @@ const Header = () => {
                             <div className="md:flex justify-between  hidden w-full px-3 ">
 
                                 {/* Navbar menu content here */}
-                                {commonNavLink}
-                                {navLink}
+                                {leftSideNav}
+                                {rightSideNav}
 
                             </div>
                         </div>
@@ -152,8 +167,8 @@ const Header = () => {
                                     <p className="text-xl md:text-2xl font-bold "><span className="text-green-500">BD</span>-TECH Solution</p>
                                 </Link>
                             </div>
-                            {commonNavLink}
-                            {navLink}
+                            {leftSideNav}
+                            {rightSideNav}
                         </ul>
                     </div>
                 </div>
