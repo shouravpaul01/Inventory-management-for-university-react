@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import SelectedAccessoriesContext from "../contexts/SelectedAccessoriesContext";
+
 
 
 const useSelectedAccessories = () => {
-    const [selectedTotalAccessories, setSelectedTotalAccessories] = useState([])
-    console.log(selectedTotalAccessories,'1');
-    useEffect(()=>{
-
-    },[selectedTotalAccessories])
+    return useContext(SelectedAccessoriesContext);
     
-    return [selectedTotalAccessories, setSelectedTotalAccessories]
+     
 };
 
 export default useSelectedAccessories;

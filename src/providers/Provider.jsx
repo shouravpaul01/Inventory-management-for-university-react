@@ -1,11 +1,11 @@
-import SelectedAccessoriesContext from "./SelectedAccessoriesContext";
+import SelectedAccessoriesProvider from "./SelectedAccessoriesProvider";
 
 
 const Provider = ({children}) => {
     return (
-        <SelectedAccessoriesContext>
+        <SelectedAccessoriesProvider>
             {children}
-        </SelectedAccessoriesContext>
+        </SelectedAccessoriesProvider>
     );
 };
 

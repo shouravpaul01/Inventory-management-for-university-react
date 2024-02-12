@@ -7,6 +7,7 @@ import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 import CategoryPage from "../pages/adminpages/Category/CategoryPage";
 import SubCategoryPage from "../pages/adminpages/SubCategory/SubCategoryPage";
 import ProductPage from "../pages/adminpages/Product/ProductPage";
+import ConfirmAccessoriesPage from "../pages/mainPages/Accessories/ConfirmAccessoriesPage";
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         {
           path:'/accessories',
           element:<AccessoriesPage/>
+        },
+        {
+          path:'/confirm-accessories',
+          element:<ConfirmAccessoriesPage/>
         },
       ],
     },

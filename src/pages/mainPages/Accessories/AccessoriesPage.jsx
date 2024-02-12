@@ -16,7 +16,7 @@ const AccessoriesPage = () => {
     const [resturnStatus, setReturnStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(4)
-    const [selectedTotalAccessories, setSelectedTotalAccessories] = useState([])
+  
 
     const [searchParams] = useSearchParams();
     const searchValue = searchParams.get('search') || '';
@@ -96,7 +96,7 @@ const AccessoriesPage = () => {
 
                             products?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
                                 {
-                                    products.data?.map((product, index) => <CardAccessories key={index} product={product} selectedTotalAccessories={selectedTotalAccessories}  setSelectedTotalAccessories={setSelectedTotalAccessories} />)
+                                    products.data?.map((product, index) => <CardAccessories key={index} accessorie={product} />)
                                 }
                             </div> : <div role="alert" className="pt-4 flex items-center justify-center gap-5 text-lg">
                                 <FaCircleInfo />

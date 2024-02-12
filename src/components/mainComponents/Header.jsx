@@ -6,6 +6,7 @@ import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaCartFlatbedS
 import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
 import InputSearch from "../sharedComponents/InputSearch";
+import useSelectedAccessories from "../../hooks/useSelectedAccessories";
 
 
 const Header = () => {
@@ -14,12 +15,12 @@ const Header = () => {
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const navigate = useNavigate()
+    const {selectedTotalAccessories }=useSelectedAccessories()
 
 
     useEffect(() => {
         // Navigate accessories page when product is search  
         if (searchValue) {
-            console.log('ddd');
             navigate(`/accessories?search=${searchValue}`)
         }
         if (!searchValue) {
@@ -27,7 +28,7 @@ const Header = () => {
         }
         console.log('header');
     }, [searchValue])
-    console.log(searchValue, 'www');
+   
     // const { user, logout, loading } = useAuth()
     // const { candidateUser } = useCandidateUser()
 
@@ -78,6 +79,7 @@ const Header = () => {
 
     const leftSideNav = <div className="flex-none "><ul className="flex items-center justify-center ">
         <li className="nav"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '} onClick={() => handleSidebarClose()}>Home</NavLink></li>
+        <li><Link to={'/accessories'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '}>accessorie</Link></li>
         <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : 'nav-item '}>Contact</Link></li>
     </ul></div>
     const rightSideNav = <div className="flex-none ">
@@ -86,9 +88,9 @@ const Header = () => {
             {
                 authNav
             }
-            <li className="flex items-center justify-center"><NavLink to={'/'} className="indicator" >
+            <li className="flex items-center justify-center"><NavLink to={'/confirm-accessories'} className="indicator" >
 
-                <span className="indicator-item text-red-400">5</span>
+                <span className="indicator-item text-red-400">{selectedTotalAccessories?.length}</span>
                 <div className="text-lg text-white"><FaCartFlatbedSuitcase /></div>
             </NavLink></li>
         </ul>
