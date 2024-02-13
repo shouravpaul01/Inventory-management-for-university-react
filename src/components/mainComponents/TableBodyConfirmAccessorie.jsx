@@ -1,27 +1,15 @@
-import React, { useState } from 'react';
+import {  useState } from 'react';
 import InputPlusMinus from '../sharedComponents/InputPlusMinus';
 
-const TableBodyConfirmAccessorie = ({ accessorie }) => {
-    const [plusMinusValue, setPlusMinusValue] = useState(accessorie?.orderQuantity)
-    const [selectedCheckboxValue, setSelectedCheckboxValue] = useState([])
-    
-    const handleCheckBoxInput = (data) => {
-        console.log(data);
-        // const filterValue = selectedCheckboxValue?.filter(item => item._id !== value._id)
-        // console.log(filterValue,value._id);
-        // if (filterValue.length>=1) {
-        //     setSelectedCheckboxValue(filterValue)
-        //     return
-        // }
 
-        setSelectedCheckboxValue([...selectedCheckboxValue,data])
-    }
-    console.log(selectedCheckboxValue);
+const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput }) => {
+    const [plusMinusValue, setPlusMinusValue] = useState(accessorie?.orderQuantity)
+    
     return (
         <tr >
             <th>
                 <label>
-                    <input type="checkbox" onChange={() => handleCheckBoxInput({ _id: accessorie?._id, orderQuantity: plusMinusValue })} className="checkbox" />
+                    <input type="checkbox" id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox" />
                 </label>
             </th>
             <td>

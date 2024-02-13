@@ -7,6 +7,7 @@ import CardAccessories from "../../../components/mainComponents/CardAccessories"
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../../../components/sharedComponents/Pagination";
 import Loading from "../../../components/sharedComponents/Loading";
+import useSelectedAccessories from "../../../hooks/useSelectedAccessories";
 
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const AccessoriesPage = () => {
@@ -16,7 +17,7 @@ const AccessoriesPage = () => {
     const [resturnStatus, setReturnStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(4)
-  
+    const { selectedTotalAccessories, setSelectedTotalAccessories } = useSelectedAccessories()
 
     const [searchParams] = useSearchParams();
     const searchValue = searchParams.get('search') || '';
@@ -24,8 +25,9 @@ const AccessoriesPage = () => {
         { value: 'Yes' },
         { value: 'No' }
     ]
-    const { data: products = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&returnStatus=${resturnStatus}`, fetcher)
-    console.log(products?.data?.length);
+
+    const { data: accessoris = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&returnStatus=${resturnStatus}`, fetcher)
+    
     const handleSelectedCategory = (_id) => {
         const contentId = document.getElementById(`${_id}`)
         const filterCategory = selectedCategories.filter(category => category !== _id)
@@ -50,7 +52,22 @@ const AccessoriesPage = () => {
             setSelectedSubCategories([...selectedSubCategories, _id])
         }
     }
+    
+    
+    const handleSelectAccessorie = (accessorie,plusMinusValue) => {
+        console.log(selectedTotalAccessories, '3')
+        const findAccessorie = selectedTotalAccessories?.find(item => item._id == accessorie._id)
+        if (findAccessorie) {
+            return
+        }
 
+        const data = { _id: accessorie?._id, name: accessorie?.name, image: accessorie?.image?.url, returnStatus: accessorie?.returnStatus, totalQuantity: accessorie?.quantity }
+        data.orderQuantity = plusMinusValue
+        data.isChecked=true
+        //    console.log(data);
+        setSelectedTotalAccessories([...selectedTotalAccessories, data])
+
+    }
     // console.log(categories);
     return (
         <section className="my-container py-12">
@@ -94,9 +111,9 @@ const AccessoriesPage = () => {
                     {
                         isLoading ? <><Loading /></> : <>{
 
-                            products?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
+                            accessoris?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
                                 {
-                                    products.data?.map((product, index) => <CardAccessories key={index} accessorie={product} />)
+                                    accessoris.data?.map((product, index) => <CardAccessories key={index} accessorie={product} handleSelectAccessorie={handleSelectAccessorie}/>)
                                 }
                             </div> : <div role="alert" className="pt-4 flex items-center justify-center gap-5 text-lg">
                                 <FaCircleInfo />
@@ -105,7 +122,7 @@ const AccessoriesPage = () => {
                             </div>
                         }
                             <div className="pt-4">
-                                <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={products?.totalPages} />
+                                <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={accessoris?.totalPages} />
                             </div>
                         </>
                     }

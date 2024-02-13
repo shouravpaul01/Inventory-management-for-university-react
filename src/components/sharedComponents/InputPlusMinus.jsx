@@ -3,7 +3,7 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 
 
 const InputPlusMinus = ({quantity,plusMinusValue, setPlusMinusValue}) => {
-    console.log(quantity);
+  
     const handlePlus = (productQuantity) => {
         if (plusMinusValue == productQuantity) {
             return
