@@ -1,11 +1,14 @@
+import AuthProvider from "./AuthProvider";
 import SelectedAccessoriesProvider from "./SelectedAccessoriesProvider";
 
 
-const Provider = ({children}) => {
+const Provider = ({ children }) => {
     return (
-        <SelectedAccessoriesProvider>
-            {children}
-        </SelectedAccessoriesProvider>
+        <AuthProvider>
+            <SelectedAccessoriesProvider>
+                {children}
+            </SelectedAccessoriesProvider>
+        </AuthProvider>
     );
 };
 

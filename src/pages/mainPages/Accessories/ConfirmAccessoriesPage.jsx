@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import useSelectedAccessories from "../../../hooks/useSelectedAccessories";
-import { FaMinus, FaPlus } from "react-icons/fa6";
+import useSelectedAccessories from "../../../hooks/useSelectedAccessories"
 import TableBodyConfirmAccessorie from "../../../components/mainComponents/TableBodyConfirmAccessorie";
-import { slowConnection } from "swr/_internal";
+import { FaArrowRight, FaCheck } from "react-icons/fa6";
+
 
 
 const ConfirmAccessoriesPage = () => {
@@ -54,6 +54,7 @@ const ConfirmAccessoriesPage = () => {
         console.log(findAccessorie,filterSelectedCheckboxValue,findSelectedCheckboxValue);
         if (findAccessorie && findSelectedCheckboxValue) {
             //If a checkbox is  unchecked,then will not be gettting the value associated with that checkbox.
+            setSelectedAll(false)
             setSelectedOne(false)
             console.log('2');
             const filterAccessorie=selectedTotalAccessories.map(item=>item._id == accessoriesId ?{...item,isChecked: false}:{...item})
@@ -72,18 +73,23 @@ const ConfirmAccessoriesPage = () => {
           }
          }
      }
+    const handleDelete=(accessoriesId)=>{
+        //Find data from total selected total accessorie
+        const filterSelectedTotalAccessories=selectedTotalAccessories.filter(item=>item._id !==accessoriesId) 
+        setSelectedTotalAccessories(filterSelectedTotalAccessories)
+    }
      console.log(selectedAll,selectedOne);
 console.log(selectedCheckboxValue);
     return (
         <section className="my-container py-16">
             <div className="overflow-x-auto">
-                <table className="table">
+                <table className="table border-b border-violet-300">
                     {/* head */}
-                    <thead className="bg-violet-200">
-                        <tr className="text-base">
-                            <th>
+                    <thead className="bg-violet-200 ">
+                        <tr className="text-base ">
+                            <th >
                                 <label>
-                                <input type="checkbox" checked={selectedAll} onChange={()=>{setSelectedAll(!selectedAll),setSelectedOne(true)}} className="checkbox" />
+                                <input type="checkbox" checked={selectedAll} onChange={()=>{setSelectedAll(!selectedAll),setSelectedOne(true)}} className="checkbox checkbox-sm checkbox-primary" />
                                 </label>
                             </th>
                             <th>Name</th>
@@ -95,12 +101,15 @@ console.log(selectedCheckboxValue);
                     </thead>
                     <tbody>
                             {
-                                selectedTotalAccessories?.map((accessorie, index) => <TableBodyConfirmAccessorie key={index} index={index} accessorie={accessorie} handleCheckBoxInput={handleCheckBoxInput} />
+                                selectedTotalAccessories?.map((accessorie, index) => <TableBodyConfirmAccessorie key={index} index={index} accessorie={accessorie} handleCheckBoxInput={handleCheckBoxInput} handleDelete={handleDelete} />
                                 ) 
                             }
   
                     </tbody>
                 </table>
+            </div>
+            <div className="text-end pt-5">
+                <button className="btn btn-sm btn-primary rounded-full font-bold me-3"><FaArrowRight />  Confirm Accessories</button>
             </div>
         </section>
     );

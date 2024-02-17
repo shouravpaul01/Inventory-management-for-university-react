@@ -1,15 +1,16 @@
 import {  useState } from 'react';
 import InputPlusMinus from '../sharedComponents/InputPlusMinus';
+import { FaXmark } from 'react-icons/fa6';
 
 
-const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput }) => {
+const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput,handleDelete }) => {
     const [plusMinusValue, setPlusMinusValue] = useState(accessorie?.orderQuantity)
     
     return (
         <tr >
             <th>
                 <label>
-                    <input type="checkbox" id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox" />
+                    <input type="checkbox"  id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox checkbox-sm checkbox-primary" />
                 </label>
             </th>
             <td>
@@ -32,6 +33,9 @@ const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput }) =>
             <td>
                 <InputPlusMinus quantity={accessorie?.totalQuantity} plusMinusValue={plusMinusValue} setPlusMinusValue={setPlusMinusValue} />
 
+            </td>
+            <td>
+                <button onClick={()=>handleDelete(accessorie?._id)} className='btn btn-xs btn-circle btn-error'><FaXmark /></button>
             </td>
         </tr>
 

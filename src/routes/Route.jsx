@@ -8,12 +8,15 @@ import CategoryPage from "../pages/adminpages/Category/CategoryPage";
 import SubCategoryPage from "../pages/adminpages/SubCategory/SubCategoryPage";
 import ProductPage from "../pages/adminpages/Product/ProductPage";
 import ConfirmAccessoriesPage from "../pages/mainPages/Accessories/ConfirmAccessoriesPage";
+import SignInAndUpPage from "../pages/sharedPages/SignInAndUp/SignInAndUpPage";
+import PrivateRoute from "./PrivateRoute";
+import UserPage from "../pages/adminpages/User/UserPage";
 
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <MainLayout/>,
+      element: <PrivateRoute><MainLayout/></PrivateRoute>,
       errorElement:<ErrorPage/>,
       children:[
         {
@@ -28,6 +31,7 @@ const router = createBrowserRouter([
           path:'/confirm-accessories',
           element:<ConfirmAccessoriesPage/>
         },
+       
       ],
     },
     {
@@ -35,6 +39,10 @@ const router = createBrowserRouter([
         element: <AdminLayout/>,
         errorElement:<ErrorPage/>,
         children:[
+          {
+            path:'/dashboard/user',
+            element:<UserPage/>,
+          },
           {
             path:'/dashboard/category',
             element:<CategoryPage/>,
@@ -49,6 +57,10 @@ const router = createBrowserRouter([
           },
         ]
     },
+    {
+        path:'/sign',
+        element:<SignInAndUpPage/>
+    }
   ]);
 
 export default router

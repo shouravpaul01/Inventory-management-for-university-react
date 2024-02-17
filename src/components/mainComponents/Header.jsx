@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
 import InputSearch from "../sharedComponents/InputSearch";
 import useSelectedAccessories from "../../hooks/useSelectedAccessories";
+import useAuth from "../../hooks/useAuth";
 
 
 const Header = () => {
-    const user = null
+   
     const candidateUser = null
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
     const [searchValue, setSearchValue] = useState('')
@@ -29,7 +30,7 @@ const Header = () => {
         console.log('header');
     }, [searchValue])
    
-    // const { user, logout, loading } = useAuth()
+    const { user, logout, loading } = useAuth()
     // const { candidateUser } = useCandidateUser()
 
 
@@ -39,16 +40,16 @@ const Header = () => {
     }
 
     const handleLogout = () => {
-        // logout()
-        //     .then(() => {
-        //         Cookies.remove('BD-Tech-Solution')
-        //         // localStorage.removeItem('BD-Tech-Solution')
-        //     })
-        //     .catch((error) => console.log(error))
+        logout()
+            .then(() => {
+                Cookies.remove('BD-Tech-Solution')
+                // localStorage.removeItem('BD-Tech-Solution')
+            })
+            .catch((error) => console.log(error))
     };
 
     const beforeSignInNavLink = <>
-        <li><NavLink to={'/signin'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
+        <li><NavLink to={'/signin-up'} className={({ isActive }) => isActive ? 'active-link-signin' : 'flex items-center'} onClick={() => handleSidebarClose()}><FaUserShield /> Singin/Up</NavLink></li>
     </>
 
     const afterSignInNavLink = <>

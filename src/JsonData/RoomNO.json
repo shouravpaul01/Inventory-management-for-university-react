@@ -1,0 +1,46 @@
+{
+    "building":"CSE Department of Jahangirnagar University",
+    "roomData":[
+        {
+            "roomType":"Teacher Rooms",
+            "rooms":[
+                {"roomNo":201,"floorNo":2 },
+                {"roomNo":202,"floorNo":2 },
+                {"roomNo":203,"floorNo":2 },
+                {"roomNo":204,"floorNo":2 },
+                {"roomNo":305,"floorNo":3 },
+                {"roomNo":306,"floorNo":3 },
+                {"roomNo":307,"floorNo":3 }
+    
+            ]
+        },
+        {
+            "roomType":"Class Rooms",
+            "rooms":[
+                {"roomNo":210,"floorNo":2 },
+                {"roomNo":212,"floorNo":2 },
+                {"roomNo":213,"floorNo":2 },
+                {"roomNo":214,"floorNo":2 },
+                {"roomNo":315,"floorNo":3 },
+                {"roomNo":316,"floorNo":3 },
+                {"roomNo":317,"floorNo":3 }
+    
+            ]
+        },
+        {
+            "roomType":"Lab Rooms",
+            "rooms":[
+                {"roomNo":110,"floorNo":2 },
+                {"roomNo":112,"floorNo":2 },
+                {"roomNo":113,"floorNo":2 }
+            ]
+        },
+        {
+            "roomType":"Library Rooms",
+            "rooms":[
+                {"roomNo":300,"floorNo":3 }
+
+            ]
+        }
+    ]
+}
