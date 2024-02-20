@@ -1,12 +1,12 @@
 
 
-const Modal = ({ width,modalId, children }) => {
-    console.log(modalId);
+const Modal = ({ width,title,modalId, children }) => {
+   
     return (
         <dialog id={modalId} className="modal">
             <div className={`modal-box ${width}`} >
                 <div className="border-b border-violet-700">
-                    <p className="pb-3 ps-2 text-xl font-bold">Edit</p>
+                    <p className="pb-3 ps-2 text-xl font-bold">{title}</p>
                 </div>
                 <form method="dialog" >
                     {/* if there is a button in form, it will close the modal */}

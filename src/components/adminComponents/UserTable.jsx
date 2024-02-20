@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import axiosInstance from '../../../axios.config';
 import { toast } from 'react-toastify';
+import Modal from '../sharedComponents/Modal';
+import UserDeails from './UserDeails';
 
 const UserTable = ({users,mutate}) => {
     const [modalId, setModalId] = useState(null)
+    const [details, setDeatils] = useState({})
 
     const handleDelete = (_id) => {
         axiosInstance.delete(`/user/${_id}`).then(res => {
@@ -21,9 +24,9 @@ const UserTable = ({users,mutate}) => {
     }
     const handleShowDetails = (_id) => {
 
-        axiosInstance.get(`/category/edit/${_id}`).then(res => {
+        axiosInstance.get(`/user/details/${_id}`).then(res => {
             document.getElementById(res.data._id).showModal()
-           
+           setDeatils(res.data)
         })
 
     }
@@ -62,9 +65,9 @@ const UserTable = ({users,mutate}) => {
                     </tbody>
                 </table>
             </div>
-            {/* <Modal width={'max-w-xl'} modalId={modalId} >
-                
-            </Modal> */}
+            <Modal width={'max-w-xl'} title={'User Details'} modalId={modalId} >
+                <UserDeails details={details}/>
+            </Modal>
         </>
 
     );
