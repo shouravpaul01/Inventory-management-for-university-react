@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Modal from "../sharedComponents/Modal";
 import { useState } from "react";
 import CategoryForm from "./CategoryForm";
+import LoadingMini from "../sharedComponents/LoadingMini";
 
 const CategoryTable = ({ categories, mutate }) => {
     const [editData, setEditData] = useState(null)
@@ -23,12 +24,16 @@ const CategoryTable = ({ categories, mutate }) => {
         })
     }
     const handleEdit = (_id) => {
-
         axiosInstance.get(`/category/edit/${_id}`).then(res => {
-            document.getElementById(res.data._id).showModal()
             setEditData(res?.data)
         })
 
+    }
+
+    //Close Modal
+    const handleCloseModal = () => {
+        setModalId(null)
+        setEditData(null)
     }
     return (
         <>
@@ -61,8 +66,8 @@ const CategoryTable = ({ categories, mutate }) => {
                     </tbody>
                 </table>
             </div>
-            <Modal width={'max-w-xl'} modalId={modalId} >
-                <CategoryForm editData={editData} mutate={mutate} />
+            <Modal width={'max-w-xl'} title={'Edit Category'} modalId={modalId} handleCloseModal={handleCloseModal}>
+                {editData ? <CategoryForm editData={editData} mutate={mutate} /> :<LoadingMini/>}
             </Modal>
         </>
 

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import Modal from '../sharedComponents/Modal';
 import SubCategoryForm from './SubCategoryForm';
+import LoadingMini from '../sharedComponents/LoadingMini';
 
 const SubCategoryTable = ({subCategories,subCategoryMutate}) => {
     const [editData,setEditData]=useState(null)
@@ -25,11 +26,15 @@ const SubCategoryTable = ({subCategories,subCategoryMutate}) => {
     const handleEdit=(_id)=>{
         
         axiosInstance.get(`/sub-cat/edit/${_id}`).then(res=>{
-            document.getElementById(res.data._id).showModal()
             setEditData(res?.data)
         })
         
     }
+    const handleCloseModal=()=>{
+        setModalId(null)
+        setEditData(null)
+    }
+    console.log(editData);
     return (
         <>
         <div className="overflow-x-auto bg-white my-3">
@@ -62,8 +67,8 @@ const SubCategoryTable = ({subCategories,subCategoryMutate}) => {
                 </tbody>
             </table>
         </div>
-        <Modal width={'max-w-xl'} modalId={modalId}>
-            <SubCategoryForm editData={editData} subCategoryMutate={subCategoryMutate} />
+        <Modal width={'max-w-xl'}  title={'Edit Sub Category'} modalId={modalId} handleCloseModal={handleCloseModal} >
+        {editData ? <SubCategoryForm editData={editData} subCategoryMutate={subCategoryMutate} />:<LoadingMini/>}
         </Modal>
         </>
     );

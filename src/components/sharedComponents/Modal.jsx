@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 
 
-const Modal = ({ width,title,modalId, children }) => {
+const Modal = ({ width,title,modalId,handleCloseModal, children }) => {
    console.log(modalId);
+   useEffect(()=>{
+    if (modalId) {
+        document.getElementById(modalId).showModal()
+    }
+   },[modalId])
     return (
         <dialog id={modalId} className="modal">
             <div className={`modal-box ${width}`} >
@@ -10,7 +16,7 @@ const Modal = ({ width,title,modalId, children }) => {
                 </div>
                 <form method="dialog" >
                     {/* if there is a button in form, it will close the modal */}
-                    <button className="btn btn-sm btn-circle btn-outline btn-primary absolute right-4 top-4 z-50">✕</button>
+                    <button onClick={()=>handleCloseModal()} className="btn btn-sm btn-circle btn-outline btn-primary absolute right-4 top-4 z-50">✕</button>
                 </form>
 
                 <div className="">

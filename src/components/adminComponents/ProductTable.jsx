@@ -4,6 +4,7 @@ import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import Modal from "../sharedComponents/Modal";
 import ProductForm from "./ProductForm";
+import LoadingMini from "../sharedComponents/LoadingMini";
 
 
 const ProductTable = ({products,productMutate}) => {
@@ -30,6 +31,11 @@ const ProductTable = ({products,productMutate}) => {
             setEditData(res?.data)
         })
 
+    }
+    //Close Modal
+    const handleCloseModal = () => {
+        setModalId(null)
+        setEditData(null)
     }
     return (
         <>
@@ -68,8 +74,8 @@ const ProductTable = ({products,productMutate}) => {
                 </tbody>
             </table>
         </div>
-        <Modal width={'max-w-3xl'} title={'Edit Accessorie'} modalId={modalId} >
-            <ProductForm editData={editData} productMutate={productMutate}/>
+        <Modal width={'max-w-3xl'} title={'Edit Accessorie'} modalId={modalId} handleCloseModal={handleCloseModal}>
+            {editData?<ProductForm editData={editData} productMutate={productMutate}/>:<LoadingMini/>}
         </Modal>
     </>
     );
