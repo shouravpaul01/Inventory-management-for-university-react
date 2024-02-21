@@ -1,6 +1,5 @@
 import { FaArrowRightFromBracket, FaBars } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router-dom";
-
 import julogo from '../assets/Images/ju-logo.png'
 import { ToastContainer } from "react-toastify";
 

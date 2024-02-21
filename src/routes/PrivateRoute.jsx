@@ -9,7 +9,7 @@ const PrivateRoute = ({ children }) => {
    const { user, isLoading } = useAuth()
    const { data: checkApproveUser={} } = useSWR(user?`/user/check-approve-user?email=${user?.email}`:'', fetcher)
    const location = useLocation()
-console.log(user,checkApproveUser);
+console.log(location);
    
    if(isLoading){
       return <Loading />

@@ -68,7 +68,7 @@ const ProductTable = ({products,productMutate}) => {
                 </tbody>
             </table>
         </div>
-        <Modal width={'max-w-3xl'} modalId={modalId} >
+        <Modal width={'max-w-3xl'} title={'Edit Accessorie'} modalId={modalId} >
             <ProductForm editData={editData} productMutate={productMutate}/>
         </Modal>
     </>

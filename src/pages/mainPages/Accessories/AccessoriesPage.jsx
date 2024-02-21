@@ -13,7 +13,6 @@ import FilterByCatorSubCat from "../../../components/mainComponents/FilterByCato
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const AccessoriesPage = () => {
     const { categories } = useCategories()
-    const [isMobileMenu, setIsMobileMenu] = useState(true);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
     const [resturnStatus, setReturnStatus] = useState('');

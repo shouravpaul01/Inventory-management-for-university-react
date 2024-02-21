@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 
 const SignInForm = () => {
-    const { register, handleSubmit, reset, control, watch, setValue, setError, formState: { errors } } = useForm()
+    const { register, handleSubmit, reset,  formState: { errors } } = useForm()
     const [showPassword,setShowPassword]=useState(false)
     const { signIn } = useAuth()
     const navigate = useNavigate()

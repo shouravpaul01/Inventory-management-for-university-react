@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import AdminLayout from "../layouts/AdminLayout";
-import HomePage from "../pages/mainPages/Home/HomePage";
 import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
 import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 import CategoryPage from "../pages/adminpages/Category/CategoryPage";
@@ -11,6 +10,8 @@ import ConfirmAccessoriesPage from "../pages/mainPages/Accessories/ConfirmAccess
 import SignInAndUpPage from "../pages/sharedPages/SignInAndUp/SignInAndUpPage";
 import PrivateRoute from "./PrivateRoute";
 import UserPage from "../pages/adminpages/User/UserPage";
+import MyOrderPage from "../pages/mainPages/Order/MyOrderPage";
+
 
 
 const router = createBrowserRouter([
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       children:[
         {
           path:'/',
-          element:<HomePage/>
+          element:<AccessoriesPage/>
         },
         {
           path:'/accessories',
@@ -31,7 +32,10 @@ const router = createBrowserRouter([
           path:'/confirm-accessories',
           element:<ConfirmAccessoriesPage/>
         },
-       
+        {
+          path:'/my-order',
+          element:<MyOrderPage/>
+        },
       ],
     },
     {

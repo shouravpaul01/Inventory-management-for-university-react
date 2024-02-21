@@ -1,8 +1,5 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LiaFaxSolid } from "react-icons/lia";
-import { FiMail } from "react-icons/fi";
-import { AiOutlinePhone } from "react-icons/ai";
-import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaBoxOpen, FaCartFlatbedSuitcase, FaHouse, FaPhone, FaRegCircleUser, FaUserShield } from "react-icons/fa6";
+import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaBoxOpen, FaHouse, FaRegCircleUser, FaUserShield } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
 import InputSearch from "../sharedComponents/InputSearch";
@@ -16,18 +13,18 @@ const Header = () => {
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const navigate = useNavigate()
+    const location=useLocation()
     const { selectedTotalAccessories } = useSelectedAccessories()
 
 
     useEffect(() => {
         // Navigate accessories page when product is search  
         if (searchValue) {
-            navigate(`/accessories?search=${searchValue}`)
+            navigate(`/?search=${searchValue}`)        
         }
         if (!searchValue) {
-            navigate(`/accessories`)
-        }
-        console.log('header');
+            navigate(location?.pathname)
+        }    
     }, [searchValue])
 
     const { user, logout, loading } = useAuth()
@@ -49,7 +46,7 @@ const Header = () => {
 
     const authNav = <>
         <li>
-            <div className="dropdown dropdown-bottom dropdown-end ">
+            <div className="dropdown dropdown-bottom dropdown-end text-black">
                 <label tabIndex={0} onClick={() => setIsOpenDropdown(!isOpenDropdown)} className={`mx-0 md:mx-2 flex items-center  justify-center gap-8 border border-violet-200 rounded-full text-white p-1`}>
                     {/* <div className="avatar">
                         <div className="w-7 rounded-full">
@@ -73,9 +70,9 @@ const Header = () => {
     </>
 
     const navLink = <ul className="flex flex-col md:flex-row md:items-center md:justify-center gap-3 md:gap-1 pe-2 text-white">
-        <li className="pe-8"><InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
-        <li className="nav nav-item"><NavLink to={'/'} className={({ isActive }) => isActive ? ' nav-active-link ' : ''} onClick={() => handleSidebarClose()}>Home</NavLink></li>
-        <li className="nav  nav-item"><NavLink to={'/accessories'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : ''}>accessorie</NavLink></li>
+        <li className="pe-8"><InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full   focus:outline-violet-600 text-black'} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
+        <li className="nav nav-item"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : ''} onClick={() => handleSidebarClose()}>Home</NavLink></li>
+        <li className="nav  nav-item"><NavLink to={'/my-order'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : ''}>My-Order</NavLink></li>
         <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-active-link ' : ''}>Contact</Link></li>
         {
             authNav

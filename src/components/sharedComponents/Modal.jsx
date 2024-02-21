@@ -1,7 +1,7 @@
 
 
 const Modal = ({ width,title,modalId, children }) => {
-   
+   console.log(modalId);
     return (
         <dialog id={modalId} className="modal">
             <div className={`modal-box ${width}`} >

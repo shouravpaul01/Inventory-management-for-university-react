@@ -10,7 +10,7 @@ const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput,handl
         <tr >
             <th>
                 <label>
-                    <input type="checkbox"  id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox checkbox-sm checkbox-primary" />
+                    <input type="checkbox"  id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name,returnStatus:accessorie?.returnStatus, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox checkbox-sm checkbox-primary" />
                 </label>
             </th>
             <td>
