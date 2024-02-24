@@ -21,13 +21,15 @@ const MyOrderPage = () => {
     const [returnAccessories, setReturnAccessories] = useState(null)
     const [allAccessories, setAllAccessories] = useState(null)
 
-    const { data: myOrders = [], isLoading } = useSWR(filterByDate ? `/order/my-order?email=${user?.email}&page=${currentPage}&fromdate=${filterByDate?.fromDate}&toDate=${filterByDate?.toDate}` : `/order/my-order?email=${user?.email}&page=${currentPage}`, fetcher)
+    const { data: myOrders = [],mutate:myOrderMutate, isLoading } = useSWR(filterByDate ? `/order/my-order?email=${user?.email}&page=${currentPage}&fromdate=${filterByDate?.fromDate}&toDate=${filterByDate?.toDate}` : `/order/my-order?email=${user?.email}&page=${currentPage}`, fetcher)
 console.log(myOrders);
     const handleFilterByDate = (date) => {
         setFilterByDate(date)
     }
     const handleShowReturnAccessoris = async (accessories, orderId) => {
-        setReturnAccessories(accessories)
+        const data=accessories?.map(accessorie=>accessorie && { ...accessorie, isChecked: true })
+        console.log(data,orderId,'r');
+        setReturnAccessories({accessories:data,orderId:orderId})
     }
     const handleShowAllAccessoris = async (accessories, orderId) => {
         console.log('fffff');
@@ -39,7 +41,7 @@ console.log(myOrders);
         setReturnAccessories(null)
         setAllAccessories(null)
     }
-    console.log(allAccessories);
+    console.log(returnAccessories);
     return (
         <>
             <section className="my-container py-10">
@@ -78,7 +80,7 @@ console.log(myOrders);
                 </div>
             </section>
             <Modal width={'max-w-2xl'} title={`${allAccessories?'All Accessories':'Return Accessories'}`} modalId={modalId} handleCloseModal={handleCloseModal}>
-                {returnAccessories && <ReturnAccessoriesTable returnAccessories={returnAccessories}/> }
+                {returnAccessories && <ReturnAccessoriesTable returnAccessories={returnAccessories?.accessories} orderId={returnAccessories?.orderId} setReturnAccessories={setReturnAccessories} myOrderMutate={myOrderMutate} /> }
                 {allAccessories && <AllAccessoriesTable allAccessories={allAccessories}/> }
             </Modal>
         </>

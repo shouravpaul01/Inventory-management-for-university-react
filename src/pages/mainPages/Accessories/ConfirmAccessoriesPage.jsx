@@ -58,7 +58,6 @@ const ConfirmAccessoriesPage = () => {
         //Find data from total selected Checkbox 
         const findSelectedCheckboxValue = selectedCheckboxValue.find(item => item._id == accessoriesId)
 
-        console.log(findAccessorie, findSelectedCheckboxValue);
         if (findAccessorie && findSelectedCheckboxValue) {
             //If a checkbox is  unchecked,then will not be gettting the value associated with that checkbox.
             setSelectedAll(false)
