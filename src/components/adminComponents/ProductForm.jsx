@@ -30,7 +30,7 @@ const ProductForm = ({ productMutate, editData }) => {
             setValue('category', editData?.category?._id)
             setValue('quantity', editData?.quantity)
             setValue('description', editData?.description)
-            setValue('returnStatus', editData?.returnStatus)
+            setValue('isItReturnable', editData?.isItReturnable)
         }
     }, [editData])
 
@@ -135,14 +135,14 @@ const ProductForm = ({ productMutate, editData }) => {
                 <div className="w-full md:w-1/2 ms-8 space-y-3">
                     <label className="font-bold text-base">Reaturn Status</label>
                     <div className="flex items-center gap-6 ms-3">
-                        <input type="radio" {...register('returnStatus', { required: "The Field is required." })} value={'Yes'} className="radio radio-primary" id="returnStatusYes" />
+                        <input type="radio" {...register('isItReturnable', { required: "The Field is required." })} value={'Yes'} className="radio radio-primary" id="isItReturnableYes" />
                         <label >Yes</label>
                     </div>
                     <div className="flex items-center gap-6 ms-3">
-                        <input type="radio" {...register('returnStatus', { required: "The Field is required." })} value={'No'} className="radio radio-primary" id="returnStatusNo" />
+                        <input type="radio" {...register('isItReturnable', { required: "The Field is required." })} value={'No'} className="radio radio-primary" id="isItReturnableNo" />
                         <label >No</label>
                     </div>
-                    {errors?.returnStatus && <p className="text-red-500">{errors?.returnStatus.message}</p>}
+                    {errors?.isItReturnable && <p className="text-red-500">{errors?.isItReturnable.message}</p>}
                 </div>
             </div>
             <div className="w-full ">

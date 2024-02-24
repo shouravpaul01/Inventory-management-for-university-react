@@ -12,7 +12,7 @@ const AllAccessoriesTable = ({allAccessories}) => {
                 </th>
                 <th>Name</th>
                 <th>OrderQty</th>
-                <th>ReturnStatus</th>
+                <th>isItReturnable</th>
                 <th>Deadline</th>
             </tr>
         </thead>
@@ -28,7 +28,7 @@ const AllAccessoriesTable = ({allAccessories}) => {
                     <td>
                         {accessorie?.orderQuantity}
                     </td>
-                    <td>{accessorie?.returnStatus}</td>
+                    <td>{accessorie?.isItReturnable}</td>
                     <td>{accessorie?.deadline}</td>
 
                 </tr>)

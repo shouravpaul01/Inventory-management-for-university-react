@@ -15,7 +15,7 @@ const AccessoriesPage = () => {
     const { categories } = useCategories()
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const [resturnStatus, setReturnStatus] = useState('');
+    const [resturnStatus, setisItReturnable] = useState('');
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(4)
     const { selectedTotalAccessories, setSelectedTotalAccessories } = useSelectedAccessories()
@@ -27,7 +27,7 @@ const AccessoriesPage = () => {
         { value: 'No' }
     ]
 
-    const { data: accessoris = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&returnStatus=${resturnStatus}`, fetcher)
+    const { data: accessoris = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&isItReturnable=${resturnStatus}`, fetcher)
 
     const handleSelectedCategory = (_id) => {
         const contentId = document.getElementById(`${_id}`)
@@ -66,7 +66,7 @@ const AccessoriesPage = () => {
             return
         }
 
-        const data = { _id: accessorie?._id, name: accessorie?.name, image: accessorie?.image?.url, returnStatus: accessorie?.returnStatus, totalQuantity: accessorie?.quantity }
+        const data = { _id: accessorie?._id, name: accessorie?.name, image: accessorie?.image?.url, isItReturnable: accessorie?.isItReturnable, totalQuantity: accessorie?.quantity }
         data.orderQuantity = plusMinusValue
         data.isChecked = true
         //    console.log(data);
@@ -98,10 +98,10 @@ const AccessoriesPage = () => {
                             </div>
                             <div className=" md:text-end md:w-full">
                                 <label >Filter By: </label>
-                                <select value={resturnStatus} onChange={(e) => setReturnStatus(e.target.value)} className="select select-bordered focus:outline-none focus:border-primary min-h-8 h-8  max-w-36">
+                                <select value={resturnStatus} onChange={(e) => setisItReturnable(e.target.value)} className="select select-bordered focus:outline-none focus:border-primary min-h-8 h-8  max-w-36">
                                     <option disabled value='' >--Select Return Status--</option>
                                     {
-                                        resturnStatusOptions?.map((returnStatus, index) => <option key={index} value={returnStatus.value}>{returnStatus.value}</option>)
+                                        resturnStatusOptions?.map((isItReturnable, index) => <option key={index} value={isItReturnable.value}>{isItReturnable.value}</option>)
                                     }
                                 </select>
                             </div>

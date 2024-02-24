@@ -11,6 +11,7 @@ import SignInAndUpPage from "../pages/sharedPages/SignInAndUp/SignInAndUpPage";
 import PrivateRoute from "./PrivateRoute";
 import UserPage from "../pages/adminpages/User/UserPage";
 import MyOrderPage from "../pages/mainPages/Order/MyOrderPage";
+import OrderPage from "../pages/adminpages/Order/OrderPage";
 
 
 
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
           {
             path:'/dashboard/product',
             element:<ProductPage/>,
+          },
+          {
+            path:'/dashboard/orders',
+            element:<OrderPage/>,
           },
         ]
     },

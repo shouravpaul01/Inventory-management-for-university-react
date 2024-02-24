@@ -2,26 +2,27 @@ import { useState } from "react";
 import axiosInstance from "../../../../axios.config";
 import useSWR from "swr";
 import Flatpickr from 'react-flatpickr';
-import 'flatpickr/dist/themes/material_blue.css';
+import 'flatpickr/dist/themes/material_green.css';
 import MyOrderTable from "../../../components/mainComponents/MyOrderTable";
 import Pagination from "../../../components/sharedComponents/Pagination";
 import Modal from "../../../components/sharedComponents/Modal";
 import ReturnAccessoriesTable from "../../../components/mainComponents/ReturnAccessoriesTable";
-import LoadingMini from "../../../components/sharedComponents/LoadingMini";
 import AllAccessoriesTable from "../../../components/mainComponents/AllAccessoriesTable";
+import useAuth from "../../../hooks/useAuth";
 
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const MyOrderPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(4)
+    const {user}=useAuth()
     const [filterByDate, setFilterByDate] = useState(null)
     const [fromAndToDate, setFromAndToDate] = useState({})
     const [modalId, setModalId] = useState(null)
     const [returnAccessories, setReturnAccessories] = useState(null)
     const [allAccessories, setAllAccessories] = useState(null)
 
-    const { data: myOrders = [], isLoading } = useSWR(filterByDate ? `/order?page=${currentPage}&fromdate=${filterByDate?.fromDate}&toDate=${filterByDate?.toDate}` : `/order?page=${currentPage}`, fetcher)
-
+    const { data: myOrders = [], isLoading } = useSWR(filterByDate ? `/order/my-order?email=${user?.email}&page=${currentPage}&fromdate=${filterByDate?.fromDate}&toDate=${filterByDate?.toDate}` : `/order/my-order?email=${user?.email}&page=${currentPage}`, fetcher)
+console.log(myOrders);
     const handleFilterByDate = (date) => {
         setFilterByDate(date)
     }
@@ -44,7 +45,7 @@ const MyOrderPage = () => {
             <section className="my-container py-10">
                 <div className="flex justify-end gap-2 pt-3">
                     <Flatpickr
-                        className="input input-sm input-bordered focus:outline-none focus:border-violet-500"
+                        className="input input-sm input-bordered focus:outline-none focus-within:border-violet-500 "
                         placeholder="Select From Date"
                         value={fromAndToDate?.fromDate}
                         onChange={(selectedDates, dateStr, ins) => {
@@ -70,7 +71,7 @@ const MyOrderPage = () => {
                     <button onClick={() => handleFilterByDate(fromAndToDate)} className="btn btn-sm btn-primary " disabled={(fromAndToDate?.fromDate && fromAndToDate?.toDate) ? false : true}>Filter By Date</button>
                 </div>
                 <div className="py-3">
-                    <MyOrderTable myOrders={myOrders?.data} handleShowReturnAccessoris={handleShowReturnAccessoris} handleShowAllAccessoris={handleShowAllAccessoris} setModalId={setModalId} />
+                    <MyOrderTable myOrders={myOrders?.data}  handleShowReturnAccessoris={handleShowReturnAccessoris} handleShowAllAccessoris={handleShowAllAccessoris} setModalId={setModalId} />
                 </div>
                 <div >
                     <Pagination totalPages={myOrders?.totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />

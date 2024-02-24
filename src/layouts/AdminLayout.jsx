@@ -105,7 +105,7 @@ const AdminLayout = () => {
                             <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Category</NavLink></li>
                             <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Sub Category</NavLink></li>
                             <li><NavLink to={'/dashboard/product'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Product</NavLink></li>
-
+                            <li><NavLink to={'/dashboard/orders'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Orders</NavLink></li>
 
                         </ul>
                     </div>
