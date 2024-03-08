@@ -1,4 +1,4 @@
-import React from 'react';
+import moment from 'moment';
 
 const AllAccessoriesTable = ({allAccessories}) => {
     return (
@@ -12,7 +12,7 @@ const AllAccessoriesTable = ({allAccessories}) => {
                 </th>
                 <th>Name</th>
                 <th>OrderQty</th>
-                <th>isItReturnable</th>
+                <th>Returnable</th>
                 <th>Deadline</th>
             </tr>
         </thead>
@@ -29,7 +29,7 @@ const AllAccessoriesTable = ({allAccessories}) => {
                         {accessorie?.orderQuantity}
                     </td>
                     <td>{accessorie?.isItReturnable}</td>
-                    <td>{accessorie?.deadline}</td>
+                    <td>{accessorie?.deadline?moment(accessorie?.deadline).format('LL'):'No'}</td>
 
                 </tr>)
             }

@@ -3,14 +3,15 @@ import InputPlusMinus from '../sharedComponents/InputPlusMinus';
 import { FaXmark } from 'react-icons/fa6';
 
 
-const TableBodyConfirmAccessorie = ({ index,accessorie,handleCheckBoxInput,handleDelete }) => {
+const TableBodyConfirmAccessorie = ({register, accessorie,checkedInput,handleCheckbox,handleDelete }) => {
     const [plusMinusValue, setPlusMinusValue] = useState(accessorie?.orderQuantity)
+    // const { register, handleSubmit, setValue, formState: { errors }, } = useForm();
     
     return (
         <tr >
             <th>
                 <label>
-                    <input type="checkbox"  id={`checkbox${index}`} checked={accessorie?.isChecked} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name,isItReturnable:accessorie?.isItReturnable, orderQuantity: plusMinusValue})} onChange={(e) => handleCheckBoxInput(e.target.value,accessorie?._id,`checkbox${index}`)} className="checkbox checkbox-sm checkbox-primary" />
+                    <input type="checkbox" {...register('accessories')}  checked={checkedInput?.includes(accessorie._id.toString())} value={JSON.stringify({_id: accessorie?._id,name:accessorie?.name,isItReturnable:accessorie?.isItReturnable, orderQuantity: plusMinusValue})} onChange={(e)=>handleCheckbox(e.target.value)}  className="checkbox checkbox-sm checkbox-primary" />
                 </label>
             </th>
             <td>

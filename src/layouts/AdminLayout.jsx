@@ -1,7 +1,8 @@
-import { FaArrowRightFromBracket, FaBars } from "react-icons/fa6";
+import { FaArrowRightFromBracket, FaArrowsDownToPeople, FaBars, FaBoxOpen, FaCubesStacked, FaGrip, FaHouse, FaLayerGroup, FaListUl, FaShare, FaSitemap, FaUserGroup } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import julogo from '../assets/Images/ju-logo.png'
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminLayout = () => {
     const handleLogout = () => {
@@ -100,13 +101,14 @@ const AdminLayout = () => {
                         <ul className="menu-item ">
 
                             {/* Sidebar content here */}
-                            <li><NavLink to={"/dashboard"} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Dashboard</NavLink></li>
-                            <li><NavLink to={'/dashboard/user'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Users</NavLink></li>
-                            <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Category</NavLink></li>
-                            <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Sub Category</NavLink></li>
-                            <li><NavLink to={'/dashboard/product'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Product</NavLink></li>
-                            <li><NavLink to={'/dashboard/orders'} className={({ isActive }) => isActive ? "menu-item-active" : ""}>Orders</NavLink></li>
-
+                            <li><NavLink to={"/dashboard"} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaHouse /> Dashboard</NavLink></li>
+                            <li><NavLink to={'/dashboard/role'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaArrowsDownToPeople /> Role</NavLink></li>
+                            <li><NavLink to={'/dashboard/user'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaUserGroup /> Users</NavLink></li>
+                            <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaGrip /> Category</NavLink></li>
+                            <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaSitemap /> Sub Category</NavLink></li>
+                            <li><NavLink to={'/dashboard/product'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaCubesStacked /> Accessories</NavLink></li>
+                            <li><NavLink to={'/dashboard/orders'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaBoxOpen /> Orders</NavLink></li>
+                            <li><NavLink to={'/dashboard/retured-accessories'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaShare />Returned Accessories</NavLink></li>
                         </ul>
                     </div>
 

@@ -1,61 +1,45 @@
-import { useState } from "react";
-import InputSearch from "../../../components/sharedComponents/InputSearch";
-import Loading from "../../../components/sharedComponents/Loading";
-import Pagination from "../../../components/sharedComponents/Pagination";
-import useSWR from "swr";
-import axiosInstance from "../../../../axios.config";
-import Modal from "../../../components/sharedComponents/Modal";
-import AllAccessoriesTable from "../../../components/mainComponents/AllAccessoriesTable";
-import OrderTable from "../../../components/adminComponents/OrderTable";
-import { FaCalendarDays } from "react-icons/fa6";
 import { IoFilterSharp } from "react-icons/io5";
+import Pagination from "../../../components/sharedComponents/Pagination";
+import InputSearch from "../../../components/sharedComponents/InputSearch";
+import { useState } from "react";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/material_green.css';
-import DeadlineReturnableAccessoriesTable from "../../../components/adminComponents/DeadlineReturnableAccessoriesTable";
+import useSWR from "swr";
+import axiosInstance from "../../../../axios.config";
+import ReturnedAccessoriesTable from "../../../components/adminComponents/ReturnedAccessoriesTable";
+import Loading from "../../../components/sharedComponents/Loading";
+import Modal from "../../../components/sharedComponents/Modal";
+import ReturnableAccessoriesTable from "../../../components/adminComponents/ReturnableAccessoriesTable";
 
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
-const OrderPage = () => {
+const ReturnedAccessoriesPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [filterByDate, setFilterByDate] = useState(null)
     const [fromAndToDate, setFromAndToDate] = useState({})
     const [modalId, setModalId] = useState(null)
-    const [returnAccessories, setReturnAccessories] = useState(null)
-    const [allAccessories, setAllAccessories] = useState(null)
-    const { data: orders = [], mutate:ordersMutate, isLoading } = useSWR(`/order?page=${currentPage}&search=${searchValue}`, fetcher)
+    const [returnedAccessories, setReturnedAccessories] = useState(null)
+
+    const { data: returedableAccessories = [],mutate:returnedMutate, isLoading } = useSWR(`/order/returned-all-accessories?page=${currentPage}&fromdate=${filterByDate?.fromDate}&toDate=${filterByDate?.toDate}&search=${searchValue}`, fetcher)
 
     const handleFilterByDate = (date) => {
         setFilterByDate(date)
     }
-    const handleShowReturnAccessoris =(accessories, orderId) => {
-        setReturnAccessories({accessories:accessories,orderId:orderId})
-    }
-    const handleShowAllAccessoris = (accessories, orderId) => {
-        setAllAccessories(accessories)
-    }
-    //Close Modal
-    const handleCloseModal = () => {
-        setModalId(null)
-        setAllAccessories(null)
-    }
-    const handleClose=()=>{
-        setReturnAccessories(null)
-    }
-   
+   const handleShowReturnedAccessoris=(orderId)=>{
+    axiosInstance.get(`/order/returnable-accessories/${orderId}`)
+    .then(res=>{
+        if (res.data.code==200) {  
+            setReturnedAccessories({accessories:res.data?.data?.accessories,orderId:res.data.data._id})
+        }
+    })
+   }
+   const handleCloseModal=()=>{
+    setModalId(null)
+    setReturnedAccessories(null)
+   }
+   console.log(returnedAccessories);
     return (
-        <section>
-           {
-           returnAccessories && <div className="">
-            <div className="flex items-center bg-violet-700  py-2 px-4">
-            <p className="font-bold text-white grow">Returnable Accessories</p>
-            <button className="shrink btn btn-sm btn-circle btn-error" onClick={()=>handleClose()}>X</button>
-            </div>
-            <div className="bg-gray-100 p-4">  
-                 <DeadlineReturnableAccessoriesTable returnAccessories={returnAccessories} setReturnAccessories={setReturnAccessories} ordersMutate={ordersMutate}/>
-            </div> 
-           </div>
-           
-            }
+        <>
         <div className="bg-gray-100 mt-4">
                 <p className="bg-violet-700 font-bold text-white py-2 px-4">All Orders</p>
                 <div className="px-4 py-5">
@@ -72,10 +56,8 @@ const OrderPage = () => {
                             setFromAndToDate(prev => prev.fromDate ? {} : { 'fromDate': dateStr })
                         }}
                         options={{
-                            dateFormat: 'Y-m-d', 
-                            appendTo: document.body, 
-                           
-                            slotChar:<FaCalendarDays />
+                            dateFormat: 'Y-m-d',  
+                        
                         }}
                     />
                     <Flatpickr
@@ -96,18 +78,19 @@ const OrderPage = () => {
                     
 
                     {
-                       isLoading ?<Loading/> : <OrderTable orders={orders?.data} mutate={ordersMutate} handleShowReturnAccessoris={handleShowReturnAccessoris} handleShowAllAccessoris={handleShowAllAccessoris} setModalId={setModalId} />
+                       isLoading ?<Loading/> : <ReturnedAccessoriesTable orders={returedableAccessories?.data} mutate={returnedMutate} handleShowReturnedAccessoris={handleShowReturnedAccessoris} setModalId={setModalId} />
                     }
 
-                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={orders?.totalPages} />
+                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={returedableAccessories?.totalPages} />
                 </div>
             </div>
-            <Modal width={'max-w-2xl  h-[500px]'} title={`'All Accessories'`} modalId={modalId} handleCloseModal={handleCloseModal}>
+            <Modal width={'max-w-3xl  h-[500px]'} title={`'Returned Accessories'`} modalId={modalId} handleCloseModal={handleCloseModal}>
                 
-                {allAccessories && <AllAccessoriesTable allAccessories={allAccessories}/> }
+                {returnedAccessories && <ReturnableAccessoriesTable returnedAccessories={returnedAccessories?.accessories} setModalId={setModalId} /> }
             </Modal>
-       </section>
+       </>
+        
     );
 };
 
-export default OrderPage;
+export default ReturnedAccessoriesPage;

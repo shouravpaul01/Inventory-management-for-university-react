@@ -1,106 +1,67 @@
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRight, FaCircleCheck } from "react-icons/fa6";
 import axiosInstance from "../../../axios.config";
 import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 
 
-const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessories, myOrderMutate }) => {
-    const [selectedAll, setSelectedAll] = useState(true)
-    const [selectedOne, setSelectedOne] = useState(true)
-    console.log(returnAccessories, 'ff');
-    const [selectedCheckboxValue, setSelectedCheckboxValue] = useState([])
+const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessories, handleCloseModal }) => {
+    const [checkedAll, setCheckedAll] = useState(true)
+    const [checkedInput, setCheckedInput] = useState([])
+    const { register, handleSubmit, setValue, formState: { errors }, } = useForm();
     useEffect(() => {
+        const accessoriesIdArray = returnAccessories.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
+        if (checkedAll) {
+            setValue('accessoriesId', accessoriesIdArray)
+            setCheckedInput(accessoriesIdArray)
 
-        if (selectedAll) {
-            // const data=returnAccessories?.map(accessorie=>accessorie.isChecked=true)
-            // setReturnAccessories(data)
-            handleGetAllData()
-            console.log('5');
         }
-        if (!selectedAll) {
-            console.log('6');
-            handleGetAllData()
-        }
-        if (selectedCheckboxValue?.length==returnAccessories?.length) {
-            setSelectedAll(true)
-            
-        }
-    }, [selectedAll,selectedCheckboxValue])
 
-    const handleGetAllData = () => {
-        let checkboxValues = [];
-        if (selectedAll && selectedOne) {
-            //when the checkbox is checked  ,then all checkbox will  check and will be getting value of all checkedbox
-            const filterAccessorie = returnAccessories?.map(item => item && { ...item, isChecked: true })
-            setReturnAccessories({ accessories: filterAccessorie, orderId: orderId })
-            console.log('0');
-            for (let i = 0; i < returnAccessories?.length; i++) {
-                const checkboxValue = document.getElementById(`checkbox${i}`).value;
-                if (checkboxValue) {
-                    const valueParse = JSON.parse(checkboxValue)
 
-                    checkboxValues.push(valueParse);
-                }
-            }
-            setSelectedCheckboxValue(checkboxValues)
+    }, [checkedAll]);
+
+    useEffect(() => {
+        const accessoriesIdArray = returnAccessories.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
+        if (checkedInput.length==0) {
+            return setCheckedAll(false)
         }
-        if (!selectedAll && selectedOne) {
-            console.log('1', selectedAll);
-            //when the checkbox is unchecked ,then all checkbox is unchecked
-            const filterAccessorie = returnAccessories?.map(item => item && { ...item, isChecked: false })
-            setReturnAccessories({ accessories: filterAccessorie, orderId: orderId })
-            checkboxValues = []
+        if (accessoriesIdArray.length == checkedInput.length) {
+            console.log(accessoriesIdArray.length, checkedInput.length, '1');
+            setCheckedAll(true)
+        } else {
+            console.log('33');
+            setCheckedAll(false)
         }
+    }, [checkedInput])
+
+    const handleCheckedAll = () => {
+        setCheckedAll(!checkedAll);
+        setCheckedInput([]);
+    };
+    
+    const handleCheckbox = (value) => {
+        checkedInput.includes(value.toString()) ? setCheckedInput(checkedInput.filter(element => element !== value)) : setCheckedInput(prev => [...prev, value])
 
     }
-    const handleCheckBoxInput = (value, accessoriesId, id) => {
-        //Find data from total selected accessories
-        const findAccessorie = returnAccessories.find(item => item._id == accessoriesId)
-        //Find data from total selected Checkbox 
-        const findSelectedCheckboxValue = selectedCheckboxValue.find(item => item._id == accessoriesId)
 
-        if (findAccessorie && findSelectedCheckboxValue) {
-            //If a checkbox is  unchecked,then will not be gettting the value associated with that checkbox.
-            setSelectedAll(false)
-            setSelectedOne(false)
-            console.log('2');
-            const filterAccessorie = returnAccessories?.map(item => item._id == accessoriesId ? { ...item, isChecked: false } : { ...item })
-            //Find data from total selected checkbox
-            const filterSelectedCheckboxValue = selectedCheckboxValue.filter(item => item._id !== accessoriesId)
-            setReturnAccessories({ accessories: filterAccessorie, orderId: orderId })
-            setSelectedCheckboxValue(filterSelectedCheckboxValue)
-        }
-        if (!findSelectedCheckboxValue) {
-            console.log('3');
-            //If a checkbox is checked,then will be gettting the value associated with that checkbox.
-            const checkboxValue = document.getElementById(id).value;
-            if (checkboxValue) {
-                setSelectedOne(false)
-                const valueParse = JSON.parse(checkboxValue)
-                const filterAccessorie = returnAccessories?.map(item => item._id == accessoriesId ? { ...item, isChecked: true } : { ...item })
-                setReturnAccessories({ accessories: filterAccessorie, orderId: orderId })
-                setSelectedCheckboxValue(prevState => [...prevState, valueParse])
-            }
-        }
-    }
-    const handleReturnedAccessories = (accessories, orderId) => {
-        console.log(accessories);
-        const accessoriesId = accessories.map(accessorie => accessorie && accessorie._id)
-        axiosInstance.patch(`/order/accessories-returned?orderId=${orderId}&accessoriesId=${accessoriesId}`)
+
+    const handleReturnedAccessories = (data) => {
+        console.log(data);
+        axiosInstance.patch(`/order/update-accessories-returned-status?orderId=${orderId}&accessoriesId=${data.accessoriesId}`)
             .then(res => {
                 if (res.data.code == 200) {
-                    myOrderMutate()
-                    const filterData=res.data.data.accessories?.filter(accessorie=>accessorie.isItReturnable=='Yes')
-                    const accessoriesChecked=filterData.map(accessorie=>accessorie && { ...accessorie, isChecked: true })
-       
-                    setReturnAccessories({accessories:accessoriesChecked,orderId:orderId})
                     toast.success(res.data.message)
+                    setReturnAccessories({ accessories: res.data.data, orderId: orderId })
+                    const filter=checkedInput.filter(checkedInputId=>!data.accessoriesId.includes(checkedInputId))
+                    setCheckedInput(filter)
+
                 }
             })
     }
+    console.log(returnAccessories,checkedInput);
     return (
-        <>
+        <form onSubmit={handleSubmit(handleReturnedAccessories)}>
             <div className="overflow-x-auto">
                 <table className="table border-b border-violet-300">
                     {/* head */}
@@ -108,9 +69,11 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                         <tr className="text-base ">
                             <th>
                                 {
-                                  selectedCheckboxValue.length>0 &&  <label>
-                                    <input type="checkbox" checked={selectedAll } onChange={() => { setSelectedAll(!selectedAll), setSelectedOne(true) }} className="checkbox checkbox-sm checkbox-primary" />
-                                </label>
+                                    <label>
+                                        {
+                                         checkedInput.length>0 && <input type="checkbox" checked={checkedAll} onChange={handleCheckedAll} className="checkbox checkbox-sm checkbox-primary" />
+                                        }
+                                    </label>
                                 }
                             </th>
                             <th>Name</th>
@@ -125,7 +88,7 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                                 <th>
                                     {
                                         <label>
-                                            <input type="checkbox" id={`checkbox${index}`} value={accessorie?.returned?'':JSON.stringify({ _id: accessorie?._id, name: accessorie?.name, isItReturnable: accessorie?.isItReturnable, orderQuantity: accessorie?.orderQuantity, deadline: accessorie?.deadline })} onChange={(e) => handleCheckBoxInput(e.target.value, accessorie?._id, `checkbox${index}`)} checked={accessorie?.isChecked && !accessorie?.returned} disabled={accessorie?.isChecked && accessorie?.returned} className="checkbox checkbox-sm checkbox-primary disabled" />
+                                            <input type="checkbox" {...register('accessoriesId')} value={accessorie?._id} onChange={(e) => handleCheckbox(e.target.value)} checked={checkedInput?.includes(accessorie?._id?.toString())} disabled={accessorie.returned.status} className="checkbox checkbox-sm checkbox-primary disabled" />
                                         </label>
                                     }
                                 </th>
@@ -136,7 +99,7 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                                     {accessorie?.orderQuantity}
                                 </td>
                                 <td>{moment(accessorie?.deadline).format('LL')}</td>
-                                <td>{moment(accessorie?.returned?.date).format('LL')}</td>
+                                <td>{accessorie?.returned?.date ? <span className="flex items-center gap-1">{moment(accessorie?.returned?.date).format('LL')} <FaCircleCheck className="text-success" /> </span> : 'No'}</td>
 
                             </tr>)
                         }
@@ -147,9 +110,9 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
 
             </div>
             <div className="text-end py-2">
-                <button onClick={() => handleReturnedAccessories(selectedCheckboxValue, orderId)} className="btn btn-sm btn-primary rounded-full "><FaArrowRight /> Returned</button>
+                <button type="submit" className="btn btn-sm btn-primary rounded-full " disabled={checkedInput.length == 0}><FaArrowRight /> Returned</button>
             </div>
-        </>
+        </form>
     );
 };
 

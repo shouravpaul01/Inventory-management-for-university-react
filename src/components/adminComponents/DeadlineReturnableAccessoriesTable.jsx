@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment/moment';
 import getReturnAccessories from '../../utils/getReturnAccessories';
 
-const ReturnAccessoriesTable = ({ returnAccessories,setReturnAccessories,ordersMutate }) => {
+const DeadlineReturnableAccessoriesTable = ({ returnAccessories,setReturnAccessories,ordersMutate }) => {
     const [deadline, setDeadline] = useState(null)
     const [editDeadline, setEditDeadline] = useState(null)
 
@@ -54,7 +54,7 @@ console.log(returnAccessories?.accessories);
                             </td>
                             <td>
                                 {
-                                    (accessorie?.deadline && !editDeadline) ?<div className='flex items-center gap-1'>
+                                    (accessorie?.deadline && editDeadline?._id!==accessorie?._id) ?<div className='flex items-center gap-1'>
                                 <p>{moment(accessorie?.deadline).format('LL')}</p>
                                     <button onClick={()=>setEditDeadline({ _id: accessorie?._id, deadline: accessorie?.deadline })} className='btn btn-sm btn-circle btn-primary'><FaPenToSquare /></button>
                                 </div>:<div className='flex items-center gap-1'>
@@ -88,4 +88,4 @@ console.log(returnAccessories?.accessories);
     );
 };
 
-export default ReturnAccessoriesTable;
+export default DeadlineReturnableAccessoriesTable;

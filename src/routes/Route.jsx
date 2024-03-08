@@ -12,6 +12,8 @@ import PrivateRoute from "./PrivateRoute";
 import UserPage from "../pages/adminpages/User/UserPage";
 import MyOrderPage from "../pages/mainPages/Order/MyOrderPage";
 import OrderPage from "../pages/adminpages/Order/OrderPage";
+import ReturnedAccessoriesPage from "../pages/adminpages/returnedAccessories/ReturnedAccessoriesPage";
+import RolePage from "../pages/adminpages/Role/RolePage";
 
 
 
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
         errorElement:<ErrorPage/>,
         children:[
           {
+            path:'/dashboard/role',
+            element:<RolePage/>,
+          },
+          {
             path:'/dashboard/user',
             element:<UserPage/>,
           },
@@ -63,6 +69,10 @@ const router = createBrowserRouter([
           {
             path:'/dashboard/orders',
             element:<OrderPage/>,
+          },
+          {
+            path:'/dashboard/retured-accessories',
+            element:<ReturnedAccessoriesPage/>,
           },
         ]
     },
