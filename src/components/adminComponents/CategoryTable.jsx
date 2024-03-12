@@ -1,14 +1,19 @@
-import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 import axiosInstance from "../../../axios.config";
 import { toast } from "react-toastify";
 import Modal from "../sharedComponents/Modal";
 import { useState } from "react";
 import CategoryForm from "./CategoryForm";
 import LoadingMini from "../sharedComponents/LoadingMini";
+import useCheckPermission from "../../hooks/useCheckPermission";
 
 const CategoryTable = ({ categories, mutate }) => {
     const [editData, setEditData] = useState(null)
     const [modalId, setModalId] = useState(null)
+    
+    //Permission
+    const checkStatusPermission = useCheckPermission(['All', 'Category status'])
+    const checkDeletePermission= useCheckPermission(['All', 'Category delete'])
 
     const handleDelete = (_id) => {
         axiosInstance.delete(`/category/${_id}`).then(res => {
@@ -44,7 +49,10 @@ const CategoryTable = ({ categories, mutate }) => {
                         <tr>
                             <th></th>
                             <th>Name</th>
-                            <th>Status</th>
+                            {
+                                //Condition of permission
+                                checkStatusPermission && <th>Status</th>
+                            }
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,12 +61,21 @@ const CategoryTable = ({ categories, mutate }) => {
                             categories?.map((category, index) => <tr key={index}>
                                 <th>{index + 1}</th>
                                 <td>{category?.name}</td>
-                                <td>
-                                    <button onClick={() => handleStatus(category?._id, category.status == 'active' ? 'inactive' : 'active')} className={`btn btn-xs uppercase ${category?.status == 'active' ? 'btn-primary' : 'btn-error'}`}>{category?.status}</button>
-                                </td>
+                                {
+                                    //Condition of permission
+                                    checkStatusPermission && <td>
+                                        <button onClick={() => handleStatus(category?._id, category.status == 'active' ? 'inactive' : 'active')} className={`btn btn-xs uppercase ${category?.status == 'active' ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {category?.status}</button>
+                                    </td>
+                                }
+
                                 <td className="space-x-2">
-                                    <button onClick={() => { handleEdit(category?._id), setModalId(category?._id) }} className="btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
-                                    <button onClick={() => handleDelete(category?._id)} className="btn  btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
+
+                                    <button onClick={() => { handleEdit(category?._id), setModalId(category?._id) }} className="btn btn-xs btn-circle btn-primary"><FaPenToSquare /></button>
+                                    {
+                                        //Condition of permission
+                                        checkDeletePermission && <button onClick={() => handleDelete(category?._id)} className="btn  btn-xs btn-circle btn-error"><FaRegTrashCan /></button>
+                                    }
+
                                 </td>
                             </tr>)
                         }
@@ -67,7 +84,7 @@ const CategoryTable = ({ categories, mutate }) => {
                 </table>
             </div>
             <Modal width={'max-w-xl'} title={'Edit Category'} modalId={modalId} handleCloseModal={handleCloseModal}>
-                {editData ? <CategoryForm editData={editData} mutate={mutate} /> :<LoadingMini/>}
+                {editData ? <CategoryForm editData={editData} mutate={mutate} /> : <LoadingMini />}
             </Modal>
         </>
 

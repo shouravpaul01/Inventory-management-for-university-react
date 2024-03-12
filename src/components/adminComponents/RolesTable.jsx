@@ -36,7 +36,7 @@ const RolesTable = ({ roles, mutate }) => {
             <div className="overflow-x-auto bg-white my-3">
                 <table className="table">
                     {
-                        roles.length == 0 && <caption className=" caption-bottom">
+                        roles?.length == 0 && <caption className=" caption-bottom">
                             <div className='flex gap-2 items-center justify-center text-lg py-2'>
                             <FaCircleInfo />
                             <span className=''>Data not found.</span>
@@ -59,12 +59,12 @@ const RolesTable = ({ roles, mutate }) => {
                             roles?.map((role, index) => <tr key={index}>
                                 <th>{index + 1}</th>
                                 <td>{role?.role}</td>
-                                <td >
-                                    <div className='flex gap-1'>
+                                <td className='max-w-52'>
+                                    <div className='flex flex-wrap gap-1'>
                                         {role?.permissions?.map((permission, index) => <span key={index} className='badge badge-success'>{permission}</span>)}
                                     </div>
                                 </td>
-                                <td className="space-x-2">
+                                <td className="flex gap-1">
                                     <button onClick={() => { handleEdit(role?._id), setModalId(role?._id) }} className="btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
                                     <button onClick={() => handleDelete(role?._id)} className="btn  btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
                                 </td>

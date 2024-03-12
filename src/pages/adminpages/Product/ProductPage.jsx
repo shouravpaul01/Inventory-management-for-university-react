@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import { useState } from 'react';
 import { FaCircleInfo, FaCirclePlus } from 'react-icons/fa6';
 import useProducts from '../../../hooks/useProducts';
+import Loading from '../../../components/sharedComponents/Loading';
 
 const ProductPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -36,22 +37,17 @@ const ProductPage = () => {
                 <div className="px-4 py-5">
 
 
-                    {
-                        products?.data?.length > 0 ? <>
+                    
                             <div className="w-full md:w-80">
                                 <InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'}/>
                             </div>
-                            <ProductTable products={products?.data} productMutate={productMutate} />
-                            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={products?.totalPages} />
-                        </> : <div role="alert" className="alert ">
-                            <FaCircleInfo />
-                            <span>Data not found.</span>
-                            <div>
+                            {
+                                isLoading ? <Loading /> : <ProductTable products={products?.data} productMutate={productMutate} />
+                            }
 
-                                <button onClick={() => setContentHide(true)} className="btn btn-sm btn-primary"><FaCirclePlus /> ADD</button>
-                            </div>
-                        </div>
-                    }
+                           
+                            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={products?.totalPages} />
+                       
 
 
                 </div>

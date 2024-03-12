@@ -1,15 +1,19 @@
 import { useState } from "react";
 import axiosInstance from "../../../axios.config";
-import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import Modal from "../sharedComponents/Modal";
 import ProductForm from "./ProductForm";
 import LoadingMini from "../sharedComponents/LoadingMini";
+import useCheckPermission from "../../hooks/useCheckPermission";
 
 
 const ProductTable = ({products,productMutate}) => {
     const [editData, setEditData] = useState(null)
     const [modalId, setModalId] = useState(null)
+     //Permission
+     const checkStatusPermission = useCheckPermission(['All', 'Accessories status'])
+     const checkDeletePermission= useCheckPermission(['All', 'Accessories delete'])
 
     const handleDelete = (_id) => {
         axiosInstance.delete(`/product/${_id}`).then(res => {
@@ -27,7 +31,6 @@ const ProductTable = ({products,productMutate}) => {
     const handleEdit = (_id) => {
 
         axiosInstance.get(`/product/edit/${_id}`).then(res => {
-            document.getElementById(res.data._id).showModal()
             setEditData(res?.data)
         })
 
@@ -49,7 +52,10 @@ const ProductTable = ({products,productMutate}) => {
                         <th>Qty</th>
                         <th>Category</th>
                         <th>Sub Cat</th>
-                        <th>Status</th>
+                        {
+                                //Condition of permission
+                                checkStatusPermission && <th>Status</th>
+                            }
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -61,12 +67,19 @@ const ProductTable = ({products,productMutate}) => {
                             <td>{product?.quantity}</td>
                             <td>{product?.category?.name}</td>
                             <td>{product?.subCategory?.name}</td>
-                            <td>
-                                <button onClick={() => handleStatus(product?._id, product.status == 'active' ? 'inactive' : 'active')} className={`btn btn-xs uppercase ${product?.status == 'active' ? 'btn-primary' : 'btn-error'}`}>{product?.status}</button>
+                            {
+                                //Condition of permission
+                                checkStatusPermission && <td>
+                                <button onClick={() => handleStatus(product?._id, product.status == 'active' ? 'inactive' : 'active')} className={`btn btn-xs uppercase ${product?.status == 'active' ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {product?.status}</button>
                             </td>
+                            }
+                            
                             <td className="space-x-2">
                                 <button onClick={() => { handleEdit(product?._id), setModalId(product?._id) }} className="btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
-                                <button onClick={() => handleDelete(product?._id)} className="btn  btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
+                                {
+                                    checkDeletePermission && <button onClick={() => handleDelete(product?._id)} className="btn  btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
+                                }
+                                
                             </td>
                         </tr>)
                     }

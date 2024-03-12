@@ -3,10 +3,17 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import julogo from '../assets/Images/ju-logo.png'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../hooks/useAuth";
 
 const AdminLayout = () => {
+    const { user,logout, isLoading } = useAuth()
+    const checkUserRole=user?.role.map(role=>role.role)
+    console.log(checkUserRole,'checkUserRole');
     const handleLogout = () => {
+        logout()
+        .then(() => {
 
+        })
     }
     return (
         <div className="drawer lg:drawer-open">
@@ -102,7 +109,10 @@ const AdminLayout = () => {
 
                             {/* Sidebar content here */}
                             <li><NavLink to={"/dashboard"} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaHouse /> Dashboard</NavLink></li>
-                            <li><NavLink to={'/dashboard/role'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaArrowsDownToPeople /> Role</NavLink></li>
+                           {
+                            checkUserRole?.includes('Super-admin') && <li><NavLink to={'/dashboard/role'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaArrowsDownToPeople /> Roles</NavLink></li>
+                         
+                           }
                             <li><NavLink to={'/dashboard/user'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaUserGroup /> Users</NavLink></li>
                             <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaGrip /> Category</NavLink></li>
                             <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaSitemap /> Sub Category</NavLink></li>
@@ -112,7 +122,7 @@ const AdminLayout = () => {
                         </ul>
                     </div>
 
-                    <div className=" absolute bottom-0 left-0 right-0">
+                    <div onClick={()=>handleLogout()} className=" absolute bottom-0 left-0 right-0">
                         <Link className="flex items-center gap-3  py-4 px-5"><FaArrowRightFromBracket /> Logout</Link>
                     </div>
                 </div>

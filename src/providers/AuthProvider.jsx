@@ -2,6 +2,8 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { useEffect, useState } from 'react';
 import AuthContext from "../contexts/AuthContext";
 import app from "../firebase/firebase.config";
+import axiosInstance from "../../axios.config";
+import Cookies from "js-cookie";
 
 const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
@@ -24,44 +26,44 @@ const AuthProvider = ({ children }) => {
         return updatePassword(signinUser, newPassword)
     }
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
             
-            // if (currentUser) {
-            //     console.log('1');
-            //     const loggedUser = {
-            //         email: currentUser.email
-            //     }
-            //     fetch('http://localhost:5000/users/jwt-signin', {
-            //         method: "POST",
-            //         headers: {
-            //             'content-type': 'application/json'
-            //         },
-            //         body: JSON.stringify(loggedUser)
-            //     })
-            //         .then(res => res.json())
-            //         .then(data => {
-            //             Cookies.set(import.meta.env.VITE_CookieName, data.token, {
-            //                 expires: 1,
-            //                 secure: true
-            //             })
+            if (currentUser) {
+                setIsLoading(true);
+                const loggedUser = {
+                    email: currentUser.email
+                }
+                
+                axiosInstance.post('/jwt/jwt-signin',loggedUser)
+                .then(res => {
+                    console.log(res);
+                        Cookies.set(import.meta.env.VITE_COOKIENAME, res.data.token, {
+                            expires: 1,
+                            secure: true
+                        })
+                        setUser(res.data?.user);
+                        setIsLoading(false);
 
-            //         })
-            // }
-            
+                    })
+               
+            }
+           if (!currentUser) {
             setUser(currentUser);
             setIsLoading(false);
-
+           }
+            
+          
         });
          //if access token has expired ,then  user will be signed out
-        // const authToken = Cookies.get('BD-Tech-Solution');
+        const authToken = Cookies.get('Ju-inventory-management');
 
-        // if (!authToken) {
-        //     logout()
-        //         .then(() => {
+        if (!authToken) {
+            logout()
+                .then(() => {
 
-        //         })
-        //         .catch((error) => console.log(error))
-        // }
+                })
+                .catch((error) => console.log(error))
+        }
         return () => unsubscribe();
     }, []);
     const value = {

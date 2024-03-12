@@ -1,20 +1,18 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/sharedComponents/Loading";
-import useSWR from "swr";
-import axiosInstance from "../../axios.config";
 
-const fetcher = url => axiosInstance.get(url).then(res => res.data)
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children,roles }) => {
    const { user, isLoading } = useAuth()
-   const { data: checkApproveUser={} } = useSWR(user?`/user/check-approve-user?email=${user?.email}`:'', fetcher)
    const location = useLocation()
-console.log(location);
-   
+   const checkRole=user?.role.map(role=>role.role).filter(element=>roles?.includes(element))
+   console.log(user);
+   console.log(checkRole,'checkRole');
+   console.log(roles,'roles');
    if(isLoading){
       return <Loading />
    }
-   if (user && checkApproveUser) {
+   if (user && checkRole.length>0) {
       return children
    }
    return <Navigate to={'/sign'} state={{ from: location }} replace></Navigate>

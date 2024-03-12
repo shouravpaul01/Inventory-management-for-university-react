@@ -14,13 +14,15 @@ import MyOrderPage from "../pages/mainPages/Order/MyOrderPage";
 import OrderPage from "../pages/adminpages/Order/OrderPage";
 import ReturnedAccessoriesPage from "../pages/adminpages/returnedAccessories/ReturnedAccessoriesPage";
 import RolePage from "../pages/adminpages/Role/RolePage";
+import SuperAdminRoute from "./SuperAdminRoute";
+import HomeDashboard from "../pages/adminpages/Home/HomeDashboard";
 
 
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <PrivateRoute><MainLayout/></PrivateRoute>,
+      element: <PrivateRoute roles={['Super-admin','Admin','User']}><MainLayout/></PrivateRoute>,
       errorElement:<ErrorPage/>,
       children:[
         {
@@ -43,12 +45,16 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <PrivateRoute><AdminLayout/></PrivateRoute>,
+        element: <PrivateRoute roles={['Super-admin','Admin']}><AdminLayout/></PrivateRoute>,
         errorElement:<ErrorPage/>,
         children:[
           {
+            path:'/dashboard',
+            element:<HomeDashboard/>,
+          },
+          {
             path:'/dashboard/role',
-            element:<RolePage/>,
+            element:<SuperAdminRoute roles={['Super-admin']}><RolePage/></SuperAdminRoute>,
           },
           {
             path:'/dashboard/user',

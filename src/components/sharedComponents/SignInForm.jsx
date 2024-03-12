@@ -1,33 +1,55 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaArrowRight, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { FaArrowRight, FaRegCircleXmark, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
+import axiosInstance from "../../../axios.config";
 
 const SignInForm = () => {
+    const [signInError,setSignInError]=useState(null)
     const { register, handleSubmit, reset,  formState: { errors } } = useForm()
     const [showPassword,setShowPassword]=useState(false)
     const { signIn } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const currentLocation = location?.state?.from?.pathname || '/'
+    console.log(currentLocation);
     
     const handleSignIn = (data) => {
-        signIn(data.email,data.password)
-        .then(()=>{
-           navigate(currentLocation,{replace:true})
-           toast.success('Successfully Sign in.')
-           reset()
+        const {email,password}=data
+        axiosInstance.get(`/user/check-approve-user?email=${email}`).then(res=>{
+            if(res.status==200){
+                signIn(email,password)
+                .then(()=>{
+                   navigate(currentLocation,{replace:true})
+                   toast.success('Successfully Sign in.')
+                   reset()
+                   setSignInError(null)
+                })
+                .catch((err) => {
+                    setSignInError('Invalid User.')
+                    console.log(err.message);
+                  });
+            }else if(res.status==201){
+                
+                setSignInError(res.data.error)
+
+            }
+console.log(res);
         })
-        .catch((err) => {
-            console.log(err.message);
-          });
+        
     }
 
     return (
         <div>
             <p className="text-lg font-bold text-indigo-400 text-center border-b">Sign In</p>
+            {
+                signInError && <div className="flex items-center text-lg text-red-500">
+                    <p className="grow">{signInError} </p>
+                <span onClick={()=>setSignInError(null)}><FaRegCircleXmark /></span>
+                </div>
+            }
             <form onSubmit={handleSubmit(handleSignIn)}>
                 <label className="form-control w-full ">
                     <div className="label">

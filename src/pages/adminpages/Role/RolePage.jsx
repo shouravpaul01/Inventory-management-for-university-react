@@ -33,10 +33,6 @@ const RolePage = () => {
 
                     {
                         isLoading ? <Loading /> : <RolesTable roles={roles?.data} mutate={roleMutate} />
-
-
-
-
                     }
 
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={roles?.totalPages} />
