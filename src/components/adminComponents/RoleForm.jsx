@@ -48,6 +48,9 @@ const RoleForm = ({ editData, mutate, handleCloseModal }) => {
         { value: 'Accessories details', label: 'Accessories details' },
         { value: 'Accessories status', label: 'Accessories status' },
         { value: 'Accessories view', label: 'Accessories view' },
+        { value: 'Confirm distribution', label: 'Confirm distribution' },
+        { value: 'Confirm accessories', label: 'Confirm accessories' },
+
 
     ]
     const showValidationError = (validationErrors) => {

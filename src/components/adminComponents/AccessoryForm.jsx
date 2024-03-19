@@ -8,17 +8,19 @@ import useSWR from "swr";
 import useSubCatByCategory from "../../hooks/useSubCatByCategory";
 import QuillEditor from "../sharedComponents/QuillEditor";
 import blankImage from '../../assets/Images/movieImg.png'
+import { codeValidation } from '../../utils/utils'
 
 
-const ProductForm = ({ productMutate, editData }) => {
+const AccessoryForm = ({ mutate, editData }) => {
     const [categoryId, setCategoryId] = useState('')
     const [imageUrl, setImageUrl] = useState('');
+    const [isBtnDisable, setIsBtnDisable] = useState(false)
     const { categories } = useCategories()
-    const { subCategories,subCatMutate } = useSubCatByCategory(categoryId)
+    const { subCategories, subCatMutate } = useSubCatByCategory(categoryId)
     const { register, handleSubmit, control, reset, setValue, setError, formState: { errors }, } = useForm();
 
     console.log(editData);
-
+    
     useEffect(() => {
         console.log('1');
         if (editData) {
@@ -28,11 +30,11 @@ const ProductForm = ({ productMutate, editData }) => {
             subCatMutate()
             setValue('subCategory', editData?.subCategory?._id)
             setValue('category', editData?.category?._id)
-            setValue('quantity', editData?.quantity)
+            // setValue('quantity', editData?.currentQuantity)
             setValue('description', editData?.description)
             setValue('isItReturnable', editData?.isItReturnable)
         }
-    }, [editData])
+    }, [editData,categoryId])
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -54,30 +56,36 @@ const ProductForm = ({ productMutate, editData }) => {
         }))
     }
     const handleStore = (data) => {
+        setIsBtnDisable(true)
+        console.log(data, 'data');
         const formData = new FormData();
         formData.append("file", data.image[0]);
         formData.append("newData", JSON.stringify(data));
 
-        axiosInstance.post('/product', formData).then(res => {
-            if (res.data.code == 200) {
-                productMutate()
+        axiosInstance.post('/accessory', formData).then(res => {
+            console.log(res, 'res');
+            if (res.status == 200) {
+                mutate()
                 setImageUrl('')
                 reset()
                 toast.success(res?.data?.message)
+                setIsBtnDisable(false)
             } else if (res?.data?.code == 204) {
                 showValidationError(res?.data?.validationErrors)
+                setIsBtnDisable(false)
             }
 
         })
     }
     const handleUpdate = (data) => {
+        console.log(data, 'data');
         const formData = new FormData();
         formData.append("file", data.image[0]);
         formData.append("newData", JSON.stringify(data));
-        axiosInstance.patch('/product', formData).then(res => {
+        axiosInstance.patch('/accessory', formData).then(res => {
             if (res.data.code == 200) {
                 document.getElementById(`${data._id}`).close()
-                productMutate()
+                mutate()
                 reset()
                 toast.success(res?.data?.message)
             } else if (res?.data?.code == 204) {
@@ -106,7 +114,7 @@ const ProductForm = ({ productMutate, editData }) => {
             </div>
             <div className="flex gap-2">
 
-                <div className='w-full'>
+                <div className='w-full md:basis-3/6'>
                     <select {...register('subCategory', { required: "The field is required." })} className="px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
                         <option value=''>---Select Sub Category---</option>
                         {
@@ -115,10 +123,26 @@ const ProductForm = ({ productMutate, editData }) => {
                     </select>
                     {errors?.subCategory && <p className="text-red-500">{errors?.subCategory.message}</p>}
                 </div>
-                <div className='w-full'>
-                    <input type="text" {...register('quantity', { required: "The field is required." })} placeholder="Quantity" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
-                    {errors?.quantity && <p className="text-red-500">{errors?.quantity.message}</p>}
-                </div>
+                {
+                    !editData && <>
+                        <div className='w-full md:basis-3/12'>
+                            <input type="number" {...register('quantity', { min: { value: 1, message: 'Allowed Only Positive number' }, required: "The field is required." })} placeholder="Quantity" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
+                            {errors?.quantity && <p className="text-red-500">{errors?.quantity.message}</p>}
+                        </div>
+                        <div className='w-full md:basis-3/12'>
+                            <input type="text" {...register('codeTitle',
+                                {
+                                    required: "The field is required.",
+                                    maxLength: { value: 5, message: 'Maximum length is 5 characters' },
+                                    validate: {
+                                        codeValidation
+                                    }
+                                }
+                            )} placeholder="Code Letter Sample:Chair" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 " />
+                            {errors?.code && <p className="text-red-500">{errors?.code.message}</p>}
+                        </div>
+                    </>
+                }
             </div>
             <div className="flex flex-col md:flex-row gap-2">
                 <div className="basis-1/2 space-y-2">
@@ -144,6 +168,7 @@ const ProductForm = ({ productMutate, editData }) => {
                     </div>
                     {errors?.isItReturnable && <p className="text-red-500">{errors?.isItReturnable.message}</p>}
                 </div>
+
             </div>
             <div className="w-full ">
                 <Controller
@@ -154,11 +179,18 @@ const ProductForm = ({ productMutate, editData }) => {
                 />
                 {errors?.description && <p className="text-red-500">{errors?.description.message}</p>}
             </div>
-            <button type="submit" className="btn h-10 min-h-10  btn-primary ">{editData ? <FaArrowRotateRight /> : <FaCirclePlus />}{editData ? 'Úpdate' : 'Add'}</button>
+            <div className="flex gap-3">
+                <button type="submit" className="btn h-10 min-h-10  btn-primary " disabled={isBtnDisable}>{editData ? <FaArrowRotateRight /> : <FaCirclePlus />}{editData ? 'Úpdate' : 'Add'}</button>
+                {
+
+                    isBtnDisable && <span className="loading loading-spinner text-primary loading-lg"></span>
+                }
+            </div>
+
 
 
         </form>
     );
 };
 
-export default ProductForm;
+export default AccessoryForm;

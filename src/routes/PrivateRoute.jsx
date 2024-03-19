@@ -12,7 +12,7 @@ const PrivateRoute = ({ children,roles }) => {
    if(isLoading){
       return <Loading />
    }
-   if (user && checkRole.length>0) {
+   if (user && checkRole?.length>0) {
       return children
    }
    return <Navigate to={'/sign'} state={{ from: location }} replace></Navigate>

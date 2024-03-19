@@ -23,19 +23,20 @@ const AccessoriesPage = () => {
     const [searchParams] = useSearchParams();
     const searchValue = searchParams.get('search') || '';
     const resturnStatusOptions = [
-        { value: 'Yes' },
-        { value: 'No' }
+        { value: '', label: 'All' },
+        { value: 'Yes', label: 'Yes' },
+        { value: 'No', label: 'No' }
     ]
 
-    const { data: accessoris = [], isLoading } = useSWR(`/product/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&isItReturnable=${resturnStatus}`, fetcher)
-
+    const { data: accessories = [], isLoading } = useSWR(`/accessory/all-active-product?search=${searchValue}&currentPage=${currentPage}&pageSize=${pageSize}&categories=${selectedCategories}&subCategories=${selectedSubCategories}&isItReturnable=${resturnStatus}`, fetcher)
+console.log(accessories,'accessories');
     const handleSelectedCategory = (_id) => {
         const contentId = document.getElementById(`${_id}`)
         const filterCategory = selectedCategories.filter(category => category !== _id)
         if (selectedCategories.includes(_id)) {
             if (contentId) {
                 contentId.classList.add('hidden')
-                contentId.checked=false
+                contentId.checked = false
 
             }
             setSelectedCategories(filterCategory)
@@ -59,21 +60,21 @@ const AccessoriesPage = () => {
     }
 
 
-    const handleSelectAccessorie = (accessorie, plusMinusValue) => {
-        console.log(selectedTotalAccessories, '3')
-        const findAccessorie = selectedTotalAccessories?.find(item => item._id == accessorie._id)
-        if (findAccessorie) {
+    const handleSelectAccessory = (accessory, plusMinusValue) => {
+        console.log(accessory, '3')
+        const findAccessory = selectedTotalAccessories?.find(item => item._id == accessory._id)
+        if (findAccessory) {
             return
         }
 
-        const data = { _id: accessorie?._id, name: accessorie?.name, image: accessorie?.image?.url, isItReturnable: accessorie?.isItReturnable, totalQuantity: accessorie?.quantity }
-        data.orderQuantity = plusMinusValue
+        const data = { _id: accessory?._id, name: accessory?.name, image: accessory?.image?.url, isItReturnable: accessory?.isItReturnable, currentQuantity: accessory?.currentQuantity,allCode:accessory.quantityDetails.allCode }
+        data.quantity = plusMinusValue
         data.isChecked = true
         //    console.log(data);
         setSelectedTotalAccessories([...selectedTotalAccessories, data])
 
     }
-    // console.log(categories);
+    console.log(selectedCategories, selectedSubCategories);
     return (
         <>
             <section className="my-container py-12">
@@ -81,7 +82,7 @@ const AccessoriesPage = () => {
                     <div className="basis-3/12 hidden md:flex flex-col">
                         <p className="bg-violet-700 font-bold text-xl text-white rounded-sm py-2 px-5 mb-3">Select Types</p>
                         <div>
-                            <FilterByCatorSubCat categories={categories} handleSelectedCategory={handleSelectedCategory} handleSelectedSubCategory={handleSelectedSubCategory} />
+                            <FilterByCatorSubCat categories={categories} selectedCategories={selectedCategories} handleSelectedCategory={handleSelectedCategory} selectedSubCategories={selectedSubCategories} handleSelectedSubCategory={handleSelectedSubCategory} />
 
                         </div>
                     </div>
@@ -93,7 +94,7 @@ const AccessoriesPage = () => {
 
                                 <label tabIndex={0} role="button" className="drawer-button  flex md:hidden items-center gap-2"><FaBars /> Categories</label>
                                 <div tabIndex={0} className="dropdown-content z-[1]  p-2 shadow bg-base-100 rounded-box w-52">
-                                    <FilterByCatorSubCat categories={categories} handleSelectedCategory={handleSelectedCategory} handleSelectedSubCategory={handleSelectedSubCategory} />
+                                    <FilterByCatorSubCat categories={categories} selectedCategories={selectedCategories} handleSelectedCategory={handleSelectedCategory} selectedSubCategories={selectedSubCategories} handleSelectedSubCategory={handleSelectedSubCategory} />
                                 </div>
                             </div>
                             <div className=" md:text-end md:w-full">
@@ -101,17 +102,17 @@ const AccessoriesPage = () => {
                                 <select value={resturnStatus} onChange={(e) => setisItReturnable(e.target.value)} className="select select-bordered focus:outline-none focus:border-primary min-h-8 h-8  max-w-36">
                                     <option disabled value='' >--Select Return Status--</option>
                                     {
-                                        resturnStatusOptions?.map((isItReturnable, index) => <option key={index} value={isItReturnable.value}>{isItReturnable.value}</option>)
+                                        resturnStatusOptions?.map((isItReturnable, index) => <option key={index} value={isItReturnable.value}>{isItReturnable.label}</option>)
                                     }
                                 </select>
                             </div>
                         </div>
                         {
-                            isLoading ? <><Loading /></> : <>{
+                            isLoading ? <Loading /> : <>{
 
-                                accessoris?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
+                                accessories?.data?.length > 0 ? <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-6">
                                     {
-                                        accessoris.data?.map((product, index) => <CardAccessories key={index} accessorie={product} handleSelectAccessorie={handleSelectAccessorie} />)
+                                        accessories.data?.map((accessory, index) => <CardAccessories key={index} accessory={accessory} handleSelectAccessory={handleSelectAccessory} />)
                                     }
                                 </div> : <div role="alert" className="pt-4 flex items-center justify-center gap-5 text-lg">
                                     <FaCircleInfo />
@@ -120,7 +121,7 @@ const AccessoriesPage = () => {
                                 </div>
                             }
                                 <div className="pt-4">
-                                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={accessoris?.totalPages} />
+                                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={accessories?.totalPages} />
                                 </div>
                             </>
                         }

@@ -1,4 +1,4 @@
-import { FaArrowRightFromBracket, FaArrowsDownToPeople, FaBars, FaBoxOpen, FaCubesStacked, FaGrip, FaHouse, FaLayerGroup, FaListUl, FaShare, FaSitemap, FaUserGroup } from "react-icons/fa6";
+import { FaArrowRightFromBracket, FaArrowsDownToPeople, FaBars, FaBoxOpen, FaCubesStacked, FaGrip, FaHouse, FaLayerGroup, FaListUl, FaRegUser, FaRightToBracket, FaShare, FaSitemap, FaUser, FaUserGroup } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import julogo from '../assets/Images/ju-logo.png'
 import { ToastContainer } from "react-toastify";
@@ -6,14 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import useAuth from "../hooks/useAuth";
 
 const AdminLayout = () => {
-    const { user,logout, isLoading } = useAuth()
-    const checkUserRole=user?.role.map(role=>role.role)
-    console.log(checkUserRole,'checkUserRole');
+    const { user, logout, isLoading } = useAuth()
+    const checkUserRole = user?.role.map(role => role.role)
+    console.log(checkUserRole, 'checkUserRole');
     const handleLogout = () => {
         logout()
-        .then(() => {
+            .then(() => {
 
-        })
+            })
     }
     return (
         <div className="drawer lg:drawer-open">
@@ -52,15 +52,11 @@ const AdminLayout = () => {
                                         <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                                     </div>
                                 </div>
-                                <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                                <ul tabIndex={0} className="menu-item dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                                     <li>
-                                        <a className="justify-between">
-                                            Profile
-                                            <span className="badge">New</span>
-                                        </a>
+                                        <Link ><FaUser /> Profile</Link>
                                     </li>
-                                    <li><a>Settings</a></li>
-                                    <li><a>Logout</a></li>
+                                    <li><Link onClick={() => handleLogout()}><FaRightToBracket /> Logout</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -90,7 +86,7 @@ const AdminLayout = () => {
             </div>
             <div className="drawer-side">
                 <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-                <div className="min-h-full  w-80  bg-gray-100  relative">
+                <div className="min-h-full  w-80  bg-gray-100  ">
                     <div className="flex flex-col items-center gap-2 border-b p-4 mb-4">
                         <div className='relative '>
                             <div className='w-20 h-20 md:w-24 md:h-24 border-2 border-dotted border-violet-800 rounded-full animate-spin p-4'>
@@ -104,27 +100,33 @@ const AdminLayout = () => {
                         </div>
 
                     </div>
-                    <div className="h-80 overflow-y-auto">
+                    <div >
                         <ul className="menu-item ">
 
                             {/* Sidebar content here */}
                             <li><NavLink to={"/dashboard"} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaHouse /> Dashboard</NavLink></li>
-                           {
-                            checkUserRole?.includes('Super-admin') && <li><NavLink to={'/dashboard/role'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaArrowsDownToPeople /> Roles</NavLink></li>
-                         
-                           }
+                            {
+                                checkUserRole?.includes('Super-admin') && <li><NavLink to={'/dashboard/role'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaArrowsDownToPeople /> Roles</NavLink></li>
+
+                            }
                             <li><NavLink to={'/dashboard/user'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaUserGroup /> Users</NavLink></li>
                             <li><NavLink to={'/dashboard/category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaGrip /> Category</NavLink></li>
                             <li><NavLink to={'/dashboard/sub-category'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaSitemap /> Sub Category</NavLink></li>
-                            <li><NavLink to={'/dashboard/product'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaCubesStacked /> Accessories</NavLink></li>
+                            <li><NavLink to={'/dashboard/accessories'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaCubesStacked /> Accessories</NavLink></li>
+                            <li><NavLink to={'/dashboard/distributes'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaBoxOpen /> Distributes</NavLink></li>
                             <li><NavLink to={'/dashboard/orders'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaBoxOpen /> Orders</NavLink></li>
                             <li><NavLink to={'/dashboard/retured-accessories'} className={({ isActive }) => isActive ? "menu-item-active" : ""}><FaShare />Returned Accessories</NavLink></li>
                         </ul>
+                        <div className="border-t md:hidden">
+                        <ul className="menu-item  ">
+                            <li><Link ><FaUser /> Profile</Link></li>
+                            <li><Link onClick={() => handleLogout()}><FaArrowRightFromBracket /> Logout</Link></li>
+                        </ul>
+                        </div>
+                        
                     </div>
 
-                    <div onClick={()=>handleLogout()} className=" absolute bottom-0 left-0 right-0">
-                        <Link className="flex items-center gap-3  py-4 px-5"><FaArrowRightFromBracket /> Logout</Link>
-                    </div>
+
                 </div>
 
 

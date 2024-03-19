@@ -5,7 +5,7 @@ import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-ico
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
     
     const totalPageArray = generateTotalPaginatePages(totalPages)
-    // console.log(totalPageArray,totalPages);
+    console.log(totalPageArray,totalPages);
     return (
         <>
         {

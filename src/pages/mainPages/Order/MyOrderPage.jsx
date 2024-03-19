@@ -27,17 +27,17 @@ const MyOrderPage = () => {
     const handleFilterByDate = (date) => {
         setFilterByDate(date)
     }
-    const handleShowReturnAccessoris = (orderId) => {
+    const handleShowReturnAccessoris = (orderId,userOrderDate) => {
         axiosInstance.get(`/order/returnable-accessories/${orderId}`)
         .then(res=>{
             if (res.data.code==200) {
-                setReturnAccessories({accessories:res.data?.data?.accessories,orderId:res.data.data._id})
+                setReturnAccessories({accessories:res.data?.data?.accessories,userOrderDate:userOrderDate,orderId:res.data.data._id})
             }
         })
        
     }
-    const handleShowAllAccessoris = (accessories, orderId) => {
-        setAllAccessories(accessories)
+    const handleShowAllAccessoris = (accessories, orderDate) => {
+        setAllAccessories({accessories:accessories,orderdate:orderDate})
     }
     //Close Modal
     const handleCloseModal = () => {
@@ -76,16 +76,16 @@ const MyOrderPage = () => {
                     />
                     <button onClick={() => handleFilterByDate(fromAndToDate)} className="btn btn-sm btn-primary " disabled={(fromAndToDate?.fromDate && fromAndToDate?.toDate) ? false : true}>Filter By Date</button>
                 </div>
-                <div className="py-3">
+                <div className="py-3 ">
                     <MyOrderTable myOrders={myOrders?.data} myOrderMutate={myOrderMutate} handleShowReturnAccessoris={handleShowReturnAccessoris} handleShowAllAccessoris={handleShowAllAccessoris} setModalId={setModalId} />
                 </div>
                 <div >
                     <Pagination totalPages={myOrders?.totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                 </div>
             </section>
-            <Modal width={'max-w-2xl'} title={`${allAccessories?'All Accessories':'Return Accessories'}`} modalId={modalId} handleCloseModal={handleCloseModal}>
+            <Modal width={'max-w-3xl'} title={`${allAccessories?'All Accessories':'Returnable Accessories'}`} modalId={modalId} handleCloseModal={handleCloseModal}>
                 {
-                returnAccessories && <ReturnAccessoriesTable returnAccessories={returnAccessories?.accessories} orderId={returnAccessories?.orderId} setReturnAccessories={setReturnAccessories} handleCloseModal={handleCloseModal} />
+                returnAccessories && <ReturnAccessoriesTable returnAccessories={returnAccessories}  setReturnAccessories={setReturnAccessories} handleCloseModal={handleCloseModal} />
             }
                 {allAccessories && <AllAccessoriesTable allAccessories={allAccessories}/> }
             </Modal>

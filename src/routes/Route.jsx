@@ -5,7 +5,6 @@ import ErrorPage from "../pages/sharedPages/Errors/ErrorPage";
 import AccessoriesPage from "../pages/mainPages/Accessories/AccessoriesPage";
 import CategoryPage from "../pages/adminpages/Category/CategoryPage";
 import SubCategoryPage from "../pages/adminpages/SubCategory/SubCategoryPage";
-import ProductPage from "../pages/adminpages/Product/ProductPage";
 import ConfirmAccessoriesPage from "../pages/mainPages/Accessories/ConfirmAccessoriesPage";
 import SignInAndUpPage from "../pages/sharedPages/SignInAndUp/SignInAndUpPage";
 import PrivateRoute from "./PrivateRoute";
@@ -16,6 +15,10 @@ import ReturnedAccessoriesPage from "../pages/adminpages/returnedAccessories/Ret
 import RolePage from "../pages/adminpages/Role/RolePage";
 import SuperAdminRoute from "./SuperAdminRoute";
 import HomeDashboard from "../pages/adminpages/Home/HomeDashboard";
+import AllAccessoriesPage from "../pages/adminpages/Accessories/AllAccessoriesPage";
+import DistributesPage from "../pages/adminpages/Distributes/DistributesPage";
+import ConfirmDistributeAccessoriesPage from "../pages/mainPages/Accessories/ConfirmDistributeAccessoriesPage";
+
 
 
 
@@ -40,6 +43,10 @@ const router = createBrowserRouter([
         {
           path:'/my-order',
           element:<MyOrderPage/>
+        },
+        {
+          path:'/confirm-distribute-accessories',
+          element:<ConfirmDistributeAccessoriesPage/>
         },
       ],
     },
@@ -69,8 +76,12 @@ const router = createBrowserRouter([
             element:<SubCategoryPage/>,
           },
           {
-            path:'/dashboard/product',
-            element:<ProductPage/>,
+            path:'/dashboard/accessories',
+            element:<AllAccessoriesPage/>,
+          },
+          {
+            path:'/dashboard/distributes',
+            element:<DistributesPage/>,
           },
           {
             path:'/dashboard/orders',

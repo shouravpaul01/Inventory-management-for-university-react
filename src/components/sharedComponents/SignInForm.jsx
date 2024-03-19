@@ -36,7 +36,6 @@ const SignInForm = () => {
                 setSignInError(res.data.error)
 
             }
-console.log(res);
         })
         
     }

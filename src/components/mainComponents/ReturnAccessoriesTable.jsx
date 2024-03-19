@@ -11,7 +11,7 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
     const [checkedInput, setCheckedInput] = useState([])
     const { register, handleSubmit, setValue, formState: { errors }, } = useForm();
     useEffect(() => {
-        const accessoriesIdArray = returnAccessories.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
+        const accessoriesIdArray = returnAccessories?.accessories?.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
         if (checkedAll) {
             setValue('accessoriesId', accessoriesIdArray)
             setCheckedInput(accessoriesIdArray)
@@ -22,7 +22,7 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
     }, [checkedAll]);
 
     useEffect(() => {
-        const accessoriesIdArray = returnAccessories.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
+        const accessoriesIdArray = returnAccessories?.accessories?.filter(accessorie => accessorie.returned.status !== true).map(accessorie => accessorie._id)
         if (checkedInput.length==0) {
             return setCheckedAll(false)
         }
@@ -48,11 +48,11 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
 
     const handleReturnedAccessories = (data) => {
         console.log(data);
-        axiosInstance.patch(`/order/update-accessories-returned-status?orderId=${orderId}&accessoriesId=${data.accessoriesId}`)
+        axiosInstance.patch(`/order/update-accessories-returned-status?orderId=${returnAccessories?.orderId}&accessoriesId=${data.accessoriesId}`)
             .then(res => {
                 if (res.data.code == 200) {
                     toast.success(res.data.message)
-                    setReturnAccessories({ accessories: res.data.data, orderId: orderId })
+                    setReturnAccessories({ accessories: res.data.data, orderId: returnAccessories?.orderId })
                     const filter=checkedInput.filter(checkedInputId=>!data.accessoriesId.includes(checkedInputId))
                     setCheckedInput(filter)
 
@@ -78,13 +78,14 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                             </th>
                             <th>Name</th>
                             <th>OrderQty</th>
+                            <th>Order Date</th>
                             <th>Deadline</th>
                             <th>Returned Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            returnAccessories?.map((accessorie, index) => <tr key={index}>
+                            returnAccessories?.accessories?.map((accessorie, index) => <tr key={index}>
                                 <th>
                                     {
                                         <label>
@@ -98,7 +99,10 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                                 <td>
                                     {accessorie?.orderQuantity}
                                 </td>
-                                <td>{moment(accessorie?.deadline).format('LL')}</td>
+                                <td>
+                                    {moment(returnAccessories?.orderDate).format('LL')}
+                                </td>
+                                <td>{accessorie?.deadline?moment(accessorie?.deadline).format('LL'):<span className="badge badge-success">No</span>}</td>
                                 <td>{accessorie?.returned?.date ? <span className="flex items-center gap-1">{moment(accessorie?.returned?.date).format('LL')} <FaCircleCheck className="text-success" /> </span> : 'No'}</td>
 
                             </tr>)

@@ -13,12 +13,13 @@ const DeadlineReturnableAccessoriesTable = ({ returnAccessories,setReturnAccesso
     const [deadline, setDeadline] = useState(null)
     const [editDeadline, setEditDeadline] = useState(null)
 
-const handleSetDeadline=(date,orderId)=>{
-    if (date) {
-        axiosInstance.patch(`/order/update-order-deadline?orderId=${orderId}&accessorieId=${date._id}&date=${date.deadline}`)
+const handleSetDeadline=(date,accessoriesId,orderId)=>{
+    console.log(date,accessoriesId,orderId);
+    if (date._id==accessoriesId) {
+        axiosInstance.patch(`/order/update-order-deadline?orderId=${orderId}&accessorieId=${accessoriesId}&date=${date.deadline}`)
     .then(res=>{if (res.data.code==200) {
         const filterAccessories=getReturnAccessories(res.data.data.accessories)
-        setReturnAccessories({accessories:filterAccessories,orderId:returnAccessories.orderId})
+        setReturnAccessories({accessories:filterAccessories,orderId:orderId})
         ordersMutate()
         toast.success(res.data.message)
     }})
@@ -37,6 +38,7 @@ console.log(returnAccessories?.accessories);
                         </th>
                         <th>Name</th>
                         <th>OrderQty</th>
+                        <th>User Order Date</th>
                         <th>Deadline</th>
                     </tr>
                 </thead>
@@ -51,6 +53,9 @@ console.log(returnAccessories?.accessories);
                             </td>
                             <td>
                                 {accessorie?.orderQuantity}
+                            </td>
+                            <td>
+                           { moment(returnAccessories?.userOrderDate).format('LL')}
                             </td>
                             <td>
                                 {
@@ -70,7 +75,7 @@ console.log(returnAccessories?.accessories);
                                             static: true
                                         }}
                                     />
-                                    <button onClick={()=>{handleSetDeadline(deadline,returnAccessories?.orderId),setEditDeadline(null)}} className='btn btn-sm btn-primary'>{editDeadline?._id==accessorie?._id?<FaArrowRotateRight />:<FaCirclePlus />} {editDeadline?._id==accessorie?._id?'Update':'Add'}</button>
+                                    <button onClick={()=>{handleSetDeadline(deadline,accessorie._id,returnAccessories?.orderId),setEditDeadline(null)}} className='btn btn-sm btn-primary'>{editDeadline?._id==accessorie?._id?<FaArrowRotateRight />:<FaCirclePlus />} {editDeadline?._id==accessorie?._id?'Update':'Add'}</button>
                                     {
                                         (editDeadline?._id==accessorie?._id) && <button onClick={()=>setEditDeadline(null)} className='btn btn-sm btn-circle btn-error '>x</button>
                                     }

@@ -84,9 +84,9 @@ const ReturnedAccessoriesPage = () => {
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={returedableAccessories?.totalPages} />
                 </div>
             </div>
-            <Modal width={'max-w-3xl  h-[500px]'} title={`'Returned Accessories'`} modalId={modalId} handleCloseModal={handleCloseModal}>
+            <Modal width={'max-w-5xl  h-[500px]'} title={`Returned Accessories`} modalId={modalId} handleCloseModal={handleCloseModal}>
                 
-                {returnedAccessories && <ReturnableAccessoriesTable returnedAccessories={returnedAccessories?.accessories} setModalId={setModalId} /> }
+                {returnedAccessories && <ReturnableAccessoriesTable returnedAccessories={returnedAccessories} setReturnedAccessories={setReturnedAccessories} setModalId={setModalId} /> }
             </Modal>
        </>
         

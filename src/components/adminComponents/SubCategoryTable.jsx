@@ -47,10 +47,7 @@ const SubCategoryTable = ({ subCategories, subCategoryMutate }) => {
                             <th></th>
                             <th>Category </th>
                             <th>Sub Category </th>
-                            {
-                                //Condition of permission
-                                checkStatusPermission && <th>Status</th>
-                            }
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -60,11 +57,12 @@ const SubCategoryTable = ({ subCategories, subCategoryMutate }) => {
                                 <th>{index + 1}</th>
                                 <td>{subCategory?.category?.name}</td>
                                 <td>{subCategory?.name}</td>
-                                {
-                                    checkStatusPermission && <td>
-                                        <button onClick={() => handleStatus(subCategory?._id, subCategory.status == 'active' ? 'inactive' : 'active')} className={`btn btn-xs uppercase ${subCategory?.status == 'active' ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {subCategory?.status}</button>
-                                    </td>
+                                <td> {
+                                    checkStatusPermission ?
+                                        <button onClick={() => handleStatus(subCategory?._id, subCategory.status ? false : true)} className={`btn btn-xs uppercase ${subCategory?.status ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {subCategory?.status ? "Approved" : "Pending"}</button> : <span className={`badge ${subCategory?.status ? 'badge-primary' : 'badge-error'}`}>{subCategory?.status ? 'Aproved' : 'Pending'}</span>
+
                                 }
+                                </td>
                                 <td className="flex gap-1">
                                     <button onClick={() => { handleEdit(subCategory?._id), setModalId(subCategory?._id) }} className="btn btn-xs btn-circle btn-primary"><FaPenToSquare /></button>
                                     {
