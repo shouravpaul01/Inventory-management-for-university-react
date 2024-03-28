@@ -78,6 +78,7 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                             </th>
                             <th>Name</th>
                             <th>OrderQty</th>
+                            <th>Code</th>
                             <th>Order Date</th>
                             <th>Deadline</th>
                             <th>Returned Date</th>
@@ -97,7 +98,12 @@ const ReturnAccessoriesTable = ({ orderId, returnAccessories, setReturnAccessori
                                     {accessorie?.name}
                                 </td>
                                 <td>
-                                    {accessorie?.orderQuantity}
+                                    {accessorie?.quantity}
+                                </td>
+                                <td className="w-40">
+                                    <div className="flex flex-wrap gap-1">
+                                    {accessorie?.allCode.map((code,index)=><span key={index} className="badge badge-success ">{code}</span>)}
+                                    </div>
                                 </td>
                                 <td>
                                     {moment(returnAccessories?.orderDate).format('LL')}

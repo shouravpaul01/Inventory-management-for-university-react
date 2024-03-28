@@ -17,9 +17,9 @@ const AccessoryForm = ({ mutate, editData }) => {
     const [isBtnDisable, setIsBtnDisable] = useState(false)
     const { categories } = useCategories()
     const { subCategories, subCatMutate } = useSubCatByCategory(categoryId)
-    const { register, handleSubmit, control, reset, setValue, setError, formState: { errors }, } = useForm();
+    const { register, handleSubmit, control,watch, reset, setValue, setError, formState: { errors }, } = useForm();
 
-    console.log(editData);
+   
     
     useEffect(() => {
         console.log('1');
@@ -125,22 +125,11 @@ const AccessoryForm = ({ mutate, editData }) => {
                 </div>
                 {
                     !editData && <>
-                        <div className='w-full md:basis-3/12'>
+                        <div className='w-full md:basis-1/2'>
                             <input type="number" {...register('quantity', { min: { value: 1, message: 'Allowed Only Positive number' }, required: "The field is required." })} placeholder="Quantity" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
                             {errors?.quantity && <p className="text-red-500">{errors?.quantity.message}</p>}
                         </div>
-                        <div className='w-full md:basis-3/12'>
-                            <input type="text" {...register('codeTitle',
-                                {
-                                    required: "The field is required.",
-                                    maxLength: { value: 5, message: 'Maximum length is 5 characters' },
-                                    validate: {
-                                        codeValidation
-                                    }
-                                }
-                            )} placeholder="Code Letter Sample:Chair" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 " />
-                            {errors?.code && <p className="text-red-500">{errors?.code.message}</p>}
-                        </div>
+                        
                     </>
                 }
             </div>
@@ -156,7 +145,8 @@ const AccessoryForm = ({ mutate, editData }) => {
 
                     {errors?.image && <p className="text-red-500">{errors?.image.message}</p>}
                 </div>
-                <div className="w-full md:w-1/2 ms-8 space-y-3">
+                {
+                    !editData && <div className="w-full md:basis-1/4 ms-8 space-y-3">
                     <label className="font-bold text-base">Reaturn Status</label>
                     <div className="flex items-center gap-6 ms-3">
                         <input type="radio" {...register('isItReturnable', { required: "The Field is required." })} value={'Yes'} className="radio radio-primary" id="isItReturnableYes" />
@@ -167,6 +157,27 @@ const AccessoryForm = ({ mutate, editData }) => {
                         <label >No</label>
                     </div>
                     {errors?.isItReturnable && <p className="text-red-500">{errors?.isItReturnable.message}</p>}
+                </div>
+                }
+                <div className="w-full md:basis-1/4 ms-8 ">
+                   
+                    {
+                        watch('isItReturnable')=='Yes' && <>
+                         <label className="font-bold text-base">Set Code Title</label>
+                        <input type="text" {...register('codeTitle',
+                                {
+                                    required: "The field is required.",
+                                    maxLength: { value: 5, message: 'Maximum length is 5 characters' },
+                                    validate: {
+                                        codeValidation
+                                    }
+                                }
+                            )} placeholder="Code Letter Sample:Chair" className="px-4 py-2 w-full  border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 " />
+                            {errors?.code && <p className="text-red-500">{errors?.code.message}</p>}
+                        </>
+                    }
+                            
+                        
                 </div>
 
             </div>

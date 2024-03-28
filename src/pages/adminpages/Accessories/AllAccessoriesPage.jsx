@@ -6,13 +6,15 @@ import Loading from '../../../components/sharedComponents/Loading';
 import useAccessories from '../../../hooks/useAccessories';
 import AccessoriesTable from '../../../components/adminComponents/AccessoriesTable';
 import AccessoryForm from '../../../components/adminComponents/AccessoryForm';
+import FilterByDate from '../../../components/sharedComponents/FilterByDate';
 
 const AllAccessoriesPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [contentHide, setContentHide] = useState(false)
+    const [filterByDate, setFilterByDate] = useState(null)
 
-    const { accessories,accessoriesMutate, isLoading } = useAccessories(currentPage, searchValue)
+    const { accessories,accessoriesMutate, isLoading } = useAccessories(currentPage, searchValue,filterByDate)
     console.log(accessories.data);
     return (
         <section >
@@ -43,8 +45,11 @@ const AllAccessoriesPage = () => {
 
 
 
-                    <div className="w-full md:w-80">
-                        <InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} />
+                <div className="flex flex-col md:flex-row gap-3 md:gap-0 justify-between">
+                        <div className="w-full md:w-80">
+                            <InputSearch setSearchValue={setSearchValue} classNameSearch={' border border-violet-400 rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} />
+                        </div>
+                        <FilterByDate setFilterByDate={setFilterByDate} />
                     </div>
                     {
                         isLoading ? <Loading /> : <AccessoriesTable accessories={accessories?.data} mutate={accessoriesMutate} />

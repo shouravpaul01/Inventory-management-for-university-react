@@ -102,6 +102,7 @@ const ConfirmAccessoriesPage = () => {
         const formData = data.accessories.map(accessory => JSON.parse(accessory))
         navigate('/confirm-distribute-accessories', { state: { accessories: formData } })
     }
+    console.log(selectedTotalAccessories);
     return (
         <form className="my-container py-16">
             <div className="overflow-x-auto">
@@ -148,7 +149,7 @@ const ConfirmAccessoriesPage = () => {
                         checkConfirmAccessoriesPermission && <button type="button" onClick={handleSubmit(handleConfirmAccessories)} className="btn btn-sm btn-primary rounded-full font-bold me-3" disabled={checkedInput?.length == 0}><FaArrowRight />  Confirm Accessories</button>
                     }
                     {
-                        checkConfirmAccessoriesPermission && <button type="button" onClick={handleSubmit(handleProcessedDistributionAccessories)} className="btn btn-sm btn-primary rounded-full font-bold me-3" disabled={checkedInput?.length == 0}><FaArrowRight />  Processed Distribution</button>
+                        checkConfirmDistributionPermission && <button type="button" onClick={handleSubmit(handleProcessedDistributionAccessories)} className="btn btn-sm btn-primary rounded-full font-bold me-3" disabled={checkedInput?.length == 0}><FaArrowRight />  Processed Distribution</button>
                     }
                 </div>
             }
