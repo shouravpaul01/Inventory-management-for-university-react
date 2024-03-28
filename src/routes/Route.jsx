@@ -18,6 +18,7 @@ import HomeDashboard from "../pages/adminpages/Home/HomeDashboard";
 import AllAccessoriesPage from "../pages/adminpages/Accessories/AllAccessoriesPage";
 import DistributesPage from "../pages/adminpages/Distributes/DistributesPage";
 import ConfirmDistributeAccessoriesPage from "../pages/mainPages/Accessories/ConfirmDistributeAccessoriesPage";
+import MyAccessoriesPage from "../pages/mainPages/MyAccessories/MyAccessoriesPage";
 
 
 
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
         {
           path:'/confirm-distribute-accessories',
           element:<ConfirmDistributeAccessoriesPage/>
+        },
+        {
+          path:'/my-accessories',
+          element:<MyAccessoriesPage/>
         },
       ],
     },

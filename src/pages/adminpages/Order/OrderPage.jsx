@@ -12,26 +12,30 @@ import { IoFilterSharp } from "react-icons/io5";
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/material_green.css';
 import DeadlineReturnableAccessoriesTable from "../../../components/adminComponents/DeadlineReturnableAccessoriesTable";
+import FilterByDate from "../../../components/sharedComponents/FilterByDate";
 
 const fetcher = url => axiosInstance.get(url).then(res => res.data)
 const OrderPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [filterByDate, setFilterByDate] = useState(null)
-    const [fromAndToDate, setFromAndToDate] = useState({})
     const [modalId, setModalId] = useState(null)
     const [returnAccessories, setReturnAccessories] = useState(null)
     const [allAccessories, setAllAccessories] = useState(null)
-    const { data: orders = [], mutate: ordersMutate, isLoading } = useSWR(`/order?page=${currentPage}&search=${searchValue}`, fetcher)
-console.log(orders);
-    const handleFilterByDate = (date) => {
-        setFilterByDate(date)
+    const { data: orders = [], mutate: ordersMutate, isLoading } = useSWR(`/order?page=${currentPage}&search=${searchValue}&filterByDate=${JSON.stringify(filterByDate)}`, fetcher)
+
+    
+    const handleShowReturnAccessories = (createdAt, orderId) => {
+        axiosInstance.get(`/order/returnable-accessories/${orderId}`)
+        .then(res=>{
+            if (res.status==200) {
+                setReturnAccessories({accessories:res.data?.data?.accessories,createdAt:createdAt,orderId:res.data.data._id})
+            }
+        })
     }
-    const handleShowReturnAccessoris = (accessories,userOrderDate, orderId) => {
-        setReturnAccessories({ accessories: accessories,userOrderDate:userOrderDate, orderId: orderId })
-    }
-    const handleShowAllAccessoris = (accessories, orderDate,orderId) => {
-        setAllAccessories({accessories:accessories,orderdate:orderDate})
+    const handleShowAllAccessories = (accessories, createdAt,orderId) => {
+       
+         setAllAccessories({accessories:accessories,createdAt:createdAt})
     }
     //Close Modal
     const handleCloseModal = () => {
@@ -52,7 +56,7 @@ console.log(orders);
                         <button className="shrink btn btn-sm btn-circle btn-error" onClick={() => handleClose()}>X</button>
                     </div>
                     <div className="bg-gray-100 p-4">
-                        <DeadlineReturnableAccessoriesTable returnAccessories={returnAccessories} setReturnAccessories={setReturnAccessories} ordersMutate={ordersMutate} />
+                        <DeadlineReturnableAccessoriesTable returnAccessories={returnAccessories} setReturnAccessories={setReturnAccessories} ordersMutate={ordersMutate} handleShowReturnAccessories={handleShowReturnAccessories}/>
                     </div>
                 </div>
 
@@ -64,38 +68,10 @@ console.log(orders);
                         <div className="w-full md:w-80">
                             <InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full py-1   focus:outline-violet-600 '} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} />
                         </div>
-                        <div className="flex flex-col md:flex-row gap-2 ">
-                            <Flatpickr
-                                className="input input-sm input-bordered focus:outline-none focus-within:border-violet-500 "
-                                placeholder="Select From Date"
-                                value={fromAndToDate?.fromDate}
-                                onChange={(selectedDates, dateStr, ins) => {
-                                    setFromAndToDate(prev => prev.fromDate ? {} : { 'fromDate': dateStr })
-                                }}
-                                options={{
-                                    dateFormat: 'Y-m-d',
-                                    appendTo: document.body,
-
-                                    slotChar: <FaCalendarDays />
-                                }}
-                            />
-                            <Flatpickr
-                                className={`input input-sm input-bordered focus:outline-none focus:border-violet-500 `}
-                                placeholder="Select To Date"
-                                value={fromAndToDate?.toDate}
-                                onChange={(selectedDates, dateStr, ins) => {
-                                    setFromAndToDate(prev => prev.toDate ? { fromDate: prev.fromDate } : { ...prev, toDate: dateStr })
-                                }}
-                                options={{
-                                    dateFormat: 'Y-m-d',
-                                }}
-                                disabled={fromAndToDate?.fromDate ? false : true}
-                            />
-                            <button onClick={() => handleFilterByDate(fromAndToDate)} className="btn btn-sm btn-primary " disabled={(fromAndToDate?.fromDate && fromAndToDate?.toDate) ? false : true}><IoFilterSharp /> Filter By Date</button>
-                        </div>
+                        <FilterByDate setFilterByDate={setFilterByDate} />
                     </div>
                     {
-                        isLoading ? <Loading /> : <OrderTable orders={orders?.data} mutate={ordersMutate} handleShowReturnAccessoris={handleShowReturnAccessoris} setReturnAccessories={setReturnAccessories} handleShowAllAccessoris={handleShowAllAccessoris} setModalId={setModalId} />
+                        isLoading ? <Loading /> : <OrderTable orders={orders?.data} mutate={ordersMutate} handleShowReturnAccessories={handleShowReturnAccessories} setReturnAccessories={setReturnAccessories} handleShowAllAccessories={handleShowAllAccessories} setModalId={setModalId} />
                     }
 
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={orders?.totalPages} />

@@ -25,6 +25,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.3",
     "react-select": "^5.8.0",
+    "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.4",
     "sort-by": "^1.2.0",
     "swr": "^2.2.4"

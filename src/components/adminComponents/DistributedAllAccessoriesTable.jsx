@@ -1,7 +1,7 @@
 import moment from 'moment';
+import React from 'react';
 
-const AllAccessoriesTable = ({allAccessories}) => {
-
+const DistributedAllAccessoriesTable = ({allAccessories}) => {
     return (
         <div className="overflow-x-auto">
         <table className="table border-b border-violet-300">
@@ -14,8 +14,8 @@ const AllAccessoriesTable = ({allAccessories}) => {
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Returnable</th>
-                <th>Order Date</th>
-                <th>Deadline</th>
+                <th>Accessoies Code</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -31,12 +31,14 @@ const AllAccessoriesTable = ({allAccessories}) => {
                         {accessory?.quantity}
                     </td>
                     <td>
-                        <span className={`badge ${accessory?.isItReturnable=='Yes'?'badge-success':'badge-error'}`}>{accessory?.isItReturnable}</span>
+                        <span className={`badge badge-success`}>{accessory?.isItReturnable}</span>
                     </td>
                     <td>
-                        {moment(allAccessories?.orderDate).format('LL')}
+                        {
+                            accessory.allCode.map((code,index)=><span key={index} className='badge badge-success me-1'>{code}</span>)
+                        }
                     </td>
-                    <td>{accessory?.deadline?moment(accessory?.deadline).format('LL'):'No'}</td>
+                    
 
                 </tr>)
             }
@@ -48,4 +50,4 @@ const AllAccessoriesTable = ({allAccessories}) => {
     );
 };
 
-export default AllAccessoriesTable;
+export default DistributedAllAccessoriesTable;

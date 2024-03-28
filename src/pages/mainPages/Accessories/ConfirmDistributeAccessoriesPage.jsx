@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { handleAccessoriesCodeOption, handleRoomNoOptionsByRoomType, handleRoomTypeOptions, validateAccessoryCode } from "../../../utils/utils";
 import { Controller, useForm } from "react-hook-form";
-import { json, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../../axios.config";
 import Select from 'react-select';
 import { FaArrowRight } from "react-icons/fa6";
@@ -64,17 +64,20 @@ const ConfirmDistributeAccessoriesPage = () => {
      }
     
     const handleConfirmAccessories = (data) => {
-        console.log(data,'eejjd');
+        
         const findAccessory=accessories.map(accessory=>{   
            if (data[`${accessory._id}`]) {
             const allCode=data[`${accessory._id}`]?.map(code=>code && code.value)
             console.log(allCode,data[`${accessory._id}`].allCode);
             return {...accessory,allCode:allCode,isItReturnable:'Fixed'}
+           }else{
+            return {...accessory,allCode:[],isItReturnable:'Fixed'}
            }
         })
         data.accessories=findAccessory
         data.roomDetails={roomType:data.roomType,roomNo:data.roomNo}
-        axiosInstance.post('/distribute-accessories',data).then(res=>{
+        console.log(data,'eejjd');
+        axiosInstance.post('/distributed-accessories',data).then(res=>{
             console.log(res);
             if (res.status==200) {
                 toast.success(res.data.message)
@@ -169,7 +172,9 @@ const ConfirmDistributeAccessoriesPage = () => {
                                         <th> {accessory.name}</th>
                                         <th> {accessory.quantity}</th>
                                         <th className="w-1/2">
-                                            <Controller
+                                            {
+                                                accessory?.isItReturnable=='Yes' && <>
+                                                <Controller
                                                 name={accessory._id}
                                                 control={control}
                                                 defaultValue={[]}
@@ -178,14 +183,15 @@ const ConfirmDistributeAccessoriesPage = () => {
                                                     <Select
                                                         {...field}
                                                         
-                                                        options={handleAccessoriesCodeOption(accessory.allCode)}
+                                                        options={handleAccessoriesCodeOption(accessory.code)}
                                                         closeMenuOnSelect={false}
                                                         isMulti
-                                                    />
-                                                   
+                                                    />  
                                                 )} 
                                                 />
                                                  {errors[`${accessory._id}`] && <p className="text-red-500">{errors[`${accessory._id}`].message}</p>}
+                                                </>
+                                            }
                                         </th>
                                     </tr>)
                                 }

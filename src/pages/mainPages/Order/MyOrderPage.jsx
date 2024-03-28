@@ -27,11 +27,11 @@ const MyOrderPage = () => {
     const handleFilterByDate = (date) => {
         setFilterByDate(date)
     }
-    const handleShowReturnAccessoris = (orderId,userOrderDate) => {
+    const handleShowReturnAccessoris = (orderId,createdAt) => {
         axiosInstance.get(`/order/returnable-accessories/${orderId}`)
         .then(res=>{
             if (res.data.code==200) {
-                setReturnAccessories({accessories:res.data?.data?.accessories,userOrderDate:userOrderDate,orderId:res.data.data._id})
+                setReturnAccessories({accessories:res.data?.data?.accessories,createdAt:createdAt,orderId:res.data.data._id})
             }
         })
        
@@ -83,7 +83,7 @@ const MyOrderPage = () => {
                     <Pagination totalPages={myOrders?.totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                 </div>
             </section>
-            <Modal width={'max-w-3xl'} title={`${allAccessories?'All Accessories':'Returnable Accessories'}`} modalId={modalId} handleCloseModal={handleCloseModal}>
+            <Modal width={'max-w-5xl'} title={`${allAccessories?'All Accessories':'Returnable Accessories'}`} modalId={modalId} handleCloseModal={handleCloseModal}>
                 {
                 returnAccessories && <ReturnAccessoriesTable returnAccessories={returnAccessories}  setReturnAccessories={setReturnAccessories} handleCloseModal={handleCloseModal} />
             }

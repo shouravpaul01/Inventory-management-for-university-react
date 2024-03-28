@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axiosInstance from "../../../axios.config";
-import { FaArrowRightArrowLeft, FaArrowRotateRight, FaCircleInfo, FaCirclePlus, FaPenToSquare, FaPlus, FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaArrowRotateRight, FaCircleInfo, FaCirclePlus, FaGripVertical, FaPenToSquare, FaPlus, FaRegTrashCan } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import Modal from "../sharedComponents/Modal";
 import LoadingMini from "../sharedComponents/LoadingMini";
@@ -21,21 +21,21 @@ const AccessoriesTable = ({ accessories, mutate }) => {
 
     const handleDisableContent = (_id) => {
         const quantity = document.getElementById(_id)
-       console.log(quantity);
-        if (isDisableContent._id==_id) {
-            setIsDisableContent(prev=>({ _id: prev._id ,isOpen:!prev.isOpen}))
+        console.log(quantity);
+        if (isDisableContent._id == _id) {
+            setIsDisableContent(prev => ({ _id: prev._id, isOpen: !prev.isOpen }))
             setErrorQtyInput(null)
             if (quantity) {
-                quantity.value = '' 
+                quantity.value = ''
             }
-        }else{
-            setIsDisableContent({ _id: _id ,isOpen:true})
-            setErrorQtyInput(null) 
+        } else {
+            setIsDisableContent({ _id: _id, isOpen: true })
+            setErrorQtyInput(null)
             if (quantity) {
-                quantity.value = '' 
+                quantity.value = ''
             }
         }
-       
+
     }
     const handleDelete = (_id) => {
         axiosInstance.delete(`/accessory/${_id}`).then(res => {
@@ -63,7 +63,7 @@ const AccessoriesTable = ({ accessories, mutate }) => {
         axiosInstance.patch(`/accessory/update-quantity?_id=${_id}&quantity=${quantity}`).then(res => {
             mutate()
             toast.success(res?.data?.message)
-            setIsDisableContent({ _id: _id ,isOpen:false})
+            setIsDisableContent({ _id: _id, isOpen: false })
         })
     }
     const handleEdit = (_id) => {
@@ -96,9 +96,11 @@ const AccessoriesTable = ({ accessories, mutate }) => {
                         <tr>
                             <th></th>
                             <th>Name</th>
-                            <th>Qty</th>
-                            <th>Category</th>
-                            {/* <th>Sub Cat</th> */}
+                            <th>Total Qty</th>
+                            <th >Current <br /> Qty</th>
+                            <th>Order <br /> Qty</th>
+                            <th >Distributed <br /> Qty</th>
+                            <th>Code</th>
                             {
                                 //Condition of permission
                                 checkStatusPermission && <th>Status</th>
@@ -110,11 +112,13 @@ const AccessoriesTable = ({ accessories, mutate }) => {
                         {
                             accessories?.map((accessory, index) => <tr key={index}>
                                 <th>{index + 1}</th>
-                                <td>{accessory?.name}</td>
+                                <td>
+                                    {accessory?.name} <span className={`badge ${accessory?.isItReturnable == 'Yes' ? 'badge-warning' : 'badge-error'}`}>{accessory?.isItReturnable}</span>
+                                </td>
                                 <td>
                                     <div className="dropdown dropdown-bottom">
                                         <div className="indicator">
-                                            <span className="indicator-item badge badge-secondary">{accessory?.currentQuantity}</span>
+                                            <span className="indicator-item badge badge-secondary">{accessory?.quantityDetails.totalQuantity}</span>
                                             <button tabIndex={0} role="button" className="btn btn-xs btn-primary " onClick={() => handleDisableContent(accessory._id)}><FaPlus />Add</button>
 
                                         </div>
@@ -135,17 +139,36 @@ const AccessoriesTable = ({ accessories, mutate }) => {
                                         }
                                     </div>
                                 </td>
-                                <td>{accessory?.category?.name}</td>
-                                {/* <td>{accessory?.subCategory?.name}</td> */}
+                                <td className="w-5">{accessory?.currentQuantity}</td>
+                                <td>{accessory?.orderQuantity || 0}</td>
+                                <td>{accessory?.distributedQuantity || 0}</td>
                                 <td>
                                     {
+                                        accessory?.isItReturnable == 'Yes' && <div className="dropdown dropdown-hover dropdown-end">
+                                            <div className="indicator">
+                                                <span className="indicator-item z-0 badge badge-secondary">{accessory?.quantityDetails?.allCode?.length}</span>
+                                                <div tabIndex={0} role="button" className="btn btn-xs btn-primary"><FaGripVertical />Code</div>
+                                            </div>
+                                            <div tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-56">
+                                                <div className="flex flex-wrap gap-1 ">
+                                                    {
+                                                        accessory?.quantityDetails?.allCode?.map((code, index) => <span key={index} className="badge badge-success">{code}</span>)
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </td>
+                                <td >
+                                    {
                                         //Condition of permission
-                                        checkStatusPermission ? <button onClick={() => handleStatus(accessory?._id, accessory.status ? false : true)} className={`btn btn-xs uppercase ${accessory?.status ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {accessory?.status ? "Approved" : "Pending"}</button> : <span className={`badge ${accessory?.status ? 'badge-primary' : 'badge-error'}`}>{accessory?.status ? 'Aproved' : 'Pending'}</span>
+                                        checkStatusPermission ? <button onClick={() => handleStatus(accessory?._id, accessory.status ? false : true)} className={`btn btn-xs w-28 uppercase ${accessory?.status ? 'btn-primary' : 'btn-error'}`}><FaArrowRightArrowLeft /> {accessory?.status ? "Approved" : "Pending"}</button> : <span className={`badge ${accessory?.status ? 'badge-primary' : 'badge-error'}`}>{accessory?.status ? 'Aproved' : 'Pending'}</span>
 
                                     }
                                 </td>
                                 <td className="flex gap-1">
-                                    <button onClick={() => { handleEdit(accessory?._id), setModalId(accessory?._id) }} className="btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
+                                    <button onClick={() => { handleEdit(accessory?._id), setModalId(accessory?._id) }} className=" btn btn-sm btn-circle btn-primary"><FaPenToSquare /></button>
                                     {
                                         checkDeletePermission && <button onClick={() => handleDelete(accessory?._id)} className="btn  btn-sm btn-circle btn-error"><FaRegTrashCan /></button>
                                     }

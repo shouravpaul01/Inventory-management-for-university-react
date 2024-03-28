@@ -53,19 +53,19 @@ const MyOrderTable = ({ myOrders,myOrderMutate, handleShowReturnAccessoris, hand
                                     <button onClick={() => { setModalId(order?._id), handleShowAllAccessoris(order?.accessories,myOrders?.createdAt) }} className="btn btn-xs btn-primary "><FaAngleUp />Accessories</button>
                                 </div>
                             </td>
-                            <td><span className={`badge  ${order?.approveStatus ? 'badge-warning' : 'badge-error'}`}>{order?.approveStatus ? "Approve" : "Pending"}</span> </td>
+                            <td><span className={`badge  ${order?.approve?.status ? 'badge-warning' : 'badge-error'}`}>{order?.approve?.status  ? "Approve" : "Pending"}</span> </td>
                             <th>
                                 {
 
                                       <div className="indicator"  >
                                         <span className="indicator-item badge badge-secondary">{getReturnAccessories(order?.accessories).length}</span>
-                                        <button onClick={() => { setModalId(order?._id), handleShowReturnAccessoris(order?._id,myOrders?.createdAt) }} className="btn btn-xs btn-primary " disabled={!(order?.approveStatus && order.recievedOrder?.status)}><FaAngleUp /> Return Accessories</button>
+                                        <button onClick={() => { setModalId(order?._id), handleShowReturnAccessoris(order?._id,myOrders?.createdAt) }} className="btn btn-xs btn-primary " disabled={!(order?.approve?.status  && order.recievedOrder?.status)}><FaAngleUp /> Return Accessories</button>
                                     </div>
                                 }
                             </th>
                             <th>
                                 {
-                                    order.recievedOrder?.status ? <span className="badge badge-success ">Yes</span> : <button onClick={() => handleRecievedOrder(order._id)} className="btn btn-xs btn-primary" disabled={!order?.approveStatus}><FaArrowsRotate /> Recieved</button>
+                                    order.recievedOrder?.status ? <span className="badge badge-success ">Yes</span> : <button onClick={() => handleRecievedOrder(order._id)} className="btn btn-xs btn-primary" disabled={!order?.approve?.status }><FaArrowsRotate /> Recieved</button>
                                 }
                             </th>
                         </tr>

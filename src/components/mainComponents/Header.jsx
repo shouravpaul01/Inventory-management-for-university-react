@@ -1,5 +1,5 @@
-import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaBoxOpen, FaHouse, FaRegCircleUser, FaUserShield } from "react-icons/fa6";
+import { Link, NavLink, useLocation, useNavigate,  } from "react-router-dom";
+import { FaAngleDown, FaAngleUp, FaArrowRightFromBracket, FaBars, FaBoxOpen, FaCubesStacked, FaHouse, FaRegCircleUser,  } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import julogo from '../../assets/Images/ju-logo.png'
 import InputSearch from "../sharedComponents/InputSearch";
@@ -13,18 +13,18 @@ const Header = () => {
     const [isOpenDropdown, setIsOpenDropdown] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const navigate = useNavigate()
-    const location=useLocation()
+    const location = useLocation()
     const { selectedTotalAccessories } = useSelectedAccessories()
 
 
     useEffect(() => {
         // Navigate accessories page when product is search  
         if (searchValue) {
-            navigate(`/?search=${searchValue}`)        
+            navigate(`/?search=${searchValue}`)
         }
         if (!searchValue) {
             navigate(location?.pathname)
-        }    
+        }
     }, [searchValue])
 
     const { user, logout, loading } = useAuth()
@@ -57,11 +57,16 @@ const Header = () => {
                     <FaRegCircleUser className="text-lg" />
                     <span className="pe-1">{isOpenDropdown ? <FaAngleDown /> : <FaAngleUp />}</span></label>
                 {
-                    isOpenDropdown && <ul tabIndex={0} onClick={() => setIsOpenDropdown(!isOpenDropdown)} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 border-e border-indigo-400 animate-custom mt-3 w-52 ">
-                        <li><NavLink to={`${candidateUser ? '/user/setting' : 'dashboard'}`} className={({ isActive }) => isActive ? 'active-link' : ''}><FaHouse /> Dashboard</NavLink></li>
+                    isOpenDropdown && <ul tabIndex={0} onClick={() => setIsOpenDropdown(!isOpenDropdown)} className="dropdown-content z-[1] menu-item p-2 shadow bg-base-100 border-e border-indigo-400 animate-custom mt-3 w-52 ">
                         <li>
-                            <button onClick={() => handleLogout()} className="flex items-center space-x-2px-4"><FaArrowRightFromBracket /><span>Logout</span>
-                            </button>
+                            <NavLink to={`${candidateUser ? '/user/setting' : 'dashboard'}`} className={({ isActive }) => isActive ? 'menu-item-active' : ''}><FaHouse /> Dashboard</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={'/my-accessories'} className={({ isActive }) => isActive ? 'menu-item-active' : ''}><FaCubesStacked /> My-Accessories</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={'/my-accessories'} onClick={() => handleLogout()} ><FaArrowRightFromBracket />Logout</NavLink>
+
                         </li>
                     </ul>
                 }
@@ -73,7 +78,7 @@ const Header = () => {
         <li className="pe-8"><InputSearch setSearchValue={setSearchValue} classNameSearch={'rounded-full   focus:outline-violet-600 text-black'} classNameSearchBtn={'rounded-e-full  p-1 text-violet-600'} /></li>
         <li className="nav nav-item"><NavLink to={'/'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : ''} onClick={() => handleSidebarClose()}>Home</NavLink></li>
         <li className="nav  nav-item"><NavLink to={'/my-order'} className={({ isActive }) => isActive ? 'nav-item nav-active-link ' : ''}>My-Order</NavLink></li>
-        <li><Link to={'/contact'} className={({ isActive }) => isActive ? 'nav-active-link ' : ''}>Contact</Link></li>
+
         {
             authNav
         }
@@ -92,7 +97,7 @@ const Header = () => {
     return (
         <>
             <header className="px-0 my-container ">
-               
+
                 <div className="drawer">
                     <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                     <div className="drawer-content border-t-2 border-violet-500">
@@ -155,7 +160,7 @@ const Header = () => {
                         <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                         <ul className="flex flex-col gap-3 p-4 w-80 min-h-full bg-violet-700">
                             {/* Sidebar content here */}
-                           
+
                             {navLink}
                         </ul>
                     </div>

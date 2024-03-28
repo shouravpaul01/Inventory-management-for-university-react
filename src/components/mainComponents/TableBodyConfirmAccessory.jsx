@@ -11,7 +11,7 @@ const TableBodyConfirmAccessory = ({register, accessory,checkedInput,handleCheck
         <tr >
             <th>
                 <label>
-                    <input type="checkbox" {...register('accessories')} id={`${accessory?._id}`} value={JSON.stringify({_id: accessory?._id,name:accessory?.name,isItReturnable:accessory?.isItReturnable, quantity: plusMinusValue ,allCode:accessory?.allCode})} onChange={(e)=>handleCheckbox(e.target.value)} checked={checkedInput?.includes(accessory._id.toString())}  className="checkbox checkbox-sm checkbox-primary" />
+                    <input type="checkbox" {...register('accessories')} id={`${accessory?._id}`} value={JSON.stringify({_id: accessory?._id,name:accessory?.name,isItReturnable:accessory?.isItReturnable, quantity: plusMinusValue ,code:accessory?.allCode})} onChange={(e)=>handleCheckbox(e.target.value)} checked={checkedInput?.includes(accessory._id.toString())}  className="checkbox checkbox-sm checkbox-primary" />
                 </label>
             </th>
             <td>
@@ -23,7 +23,7 @@ const TableBodyConfirmAccessory = ({register, accessory,checkedInput,handleCheck
                     </div>
                     <div>
                         <div className="font-bold">{accessory?.name}</div>
-                        <div className="badge badge-secondary">{accessory?.quantity}</div>
+                        <div className="badge badge-secondary">{accessory?.currentQuantity}</div>
                     </div>
                 </div>
             </td>
